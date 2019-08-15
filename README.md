@@ -22,3 +22,6 @@ Run cricket.py on any text editor to get started
 * Include as many players as the user intends and the opposing team will change to match the user team players.
 * When including more players, a system has to be created for "out". Unlike a player switch during odd scores, the out will permanently remove the current batsman from the playing field and bring the next player.
 * If all the players of a team gets out before the balls are completed, the team will cease to bat.
+
+# Cheat sheet
+When batting you can enter any integer number you want like 13 or 35 or even over a thousand. This is valid for this game because the baller will only generate random numbers from 0 to 6. So if you enter any number above that, they just won't match! (Will be fixing this real soon. Life ain't that easy!)
