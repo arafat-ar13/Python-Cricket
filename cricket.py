@@ -216,7 +216,7 @@ user_team_won = True if user_team.total_team_run[
 sleep(1)
 if user_team_won == True:
     print(
-        f"Congrats! Your won won by {user_team.total_team_run[user_team.team_name] - opposing_team.total_team_run[opposing_team.team_name]} runs")
+        f"Congrats! Your team won by {user_team.total_team_run[user_team.team_name] - opposing_team.total_team_run[opposing_team.team_name]} runs")
 else:
     print(
         f"Better luck next time! You lost by {opposing_team.total_team_run[opposing_team.team_name] - user_team.total_team_run[user_team.team_name]} runs")
