@@ -2,10 +2,13 @@ from random import randint
 from time import sleep
 
 # creating a toss class
+
+
 class Toss():
     def toss(self):
         choice = ["heads", "tails"]
         return choice[randint(0, 1)]
+
 
 class Team():
     def __init__(self, team_name, player_names=list()):
@@ -21,6 +24,7 @@ class Team():
         total_score = sum(score)
         self.total_team_run[self.team_name] += total_score
 
+
 class Player():
     def __init__(self, name):
         self.name = name
@@ -30,7 +34,8 @@ class Player():
         self.player_info_dict[self.name] += score
 
 
-user_team = Team(input("Enter your team name: "), player_names=input("Enter your players, seperated by commas: ").split(", "))
+user_team = Team(input("Enter your team name: "), player_names=input(
+    "Enter your players, seperated by commas: ").split(", "))
 opposing_team = Team("Opposing Team")
 
 # setting up opposing team players
@@ -82,10 +87,12 @@ if user_team.playing == "Batting":
         run = randint(0, 6)
         if run != user_team_run:
             if user_team_run % 2 == 0:
-                print(f"Wow! {current_batsman.name} scored {user_team_run} runs")
+                print(
+                    f"Wow! {current_batsman.name} scored {user_team_run} runs")
                 current_batsman.run(user_team_run)
             else:
-                print(f"Wow! {current_batsman.name} scored {user_team_run} runs")
+                print(
+                    f"Wow! {current_batsman.name} scored {user_team_run} runs")
                 current_batsman.run(user_team_run)
                 current_batsman = user_player2 if current_batsman == user_player1 else user_player1
         else:
@@ -171,8 +178,10 @@ sleep(1)
 print(opposing_team_player1.player_info_dict)
 print(opposing_team_player2.player_info_dict)
 
-user_team.team_score([user_player1.player_info_dict[user_player1.name], user_player2.player_info_dict[user_player2.name]])
-opposing_team.team_score([opposing_team_player1.player_info_dict[opposing_team_player1.name], opposing_team_player2.player_info_dict[opposing_team_player2.name]])
+user_team.team_score([user_player1.player_info_dict[user_player1.name],
+                      user_player2.player_info_dict[user_player2.name]])
+opposing_team.team_score([opposing_team_player1.player_info_dict[opposing_team_player1.name],
+                          opposing_team_player2.player_info_dict[opposing_team_player2.name]])
 
 sleep(1)
 print(user_team.total_team_run)
@@ -180,10 +189,13 @@ sleep(1)
 print(opposing_team.total_team_run)
 
 # Let's see who won
-user_team_won = True if user_team.total_team_run[user_team.team_name] > opposing_team.total_team_run[opposing_team.team_name] else False
+user_team_won = True if user_team.total_team_run[
+    user_team.team_name] > opposing_team.total_team_run[opposing_team.team_name] else False
 
 sleep(1)
 if user_team_won == True:
-    print(f"Congrats! Your won won by {user_team.total_team_run[user_team.team_name] - opposing_team.total_team_run[opposing_team.team_name]} runs")
+    print(
+        f"Congrats! Your won won by {user_team.total_team_run[user_team.team_name] - opposing_team.total_team_run[opposing_team.team_name]} runs")
 else:
-    print(f"Better luck next time! You lost by {opposing_team.total_team_run[opposing_team.team_name] - user_team.total_team_run[user_team.team_name]} runs")
+    print(
+        f"Better luck next time! You lost by {opposing_team.total_team_run[opposing_team.team_name] - user_team.total_team_run[user_team.team_name]} runs")
