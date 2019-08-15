@@ -51,8 +51,8 @@ opposing_team.toss_choice = "heads" if user_team.toss_choice == "tails" else "ta
 # Let's check who won and who'll play what
 if user_team.toss_choice == toss():
     print("You have won the toss")
-    user_choice = input("Bat or Ball: ")
-    user_team.playing = 'Batting' if user_choice == "Bat" else "Balling"
+    user_choice = input("Bat or Ball: ").lower()
+    user_team.playing = 'Batting' if user_choice == "bat" else "Balling"
     opposing_team.playing = "Balling" if user_team.playing == "Batting" else "Batting"
 else:
     print("You have lost")
@@ -80,7 +80,9 @@ balls = 15
 wickets = len(user_team.player_names) - 1
 
 if user_team.playing == "Batting":
-    current_batsman = user_player_dict["user_player1"]
+    position = 0
+    playing_batsmen = [user_player_dict["user_player1"], user_player_dict["user_player2"]]
+    current_batsman = playing_batsmen[position]
     while balls != 0:
         user_team_run = int(input("Enter your run number: "))
         run = randint(0, 6)
@@ -90,11 +92,12 @@ if user_team.playing == "Batting":
                     f"Wow! {current_batsman.name} scored {user_team_run} runs")
                 current_batsman.run(user_team_run)
             else:
-                print(
-                    f"Wow! {current_batsman.name} scored {user_team_run} runs")
+                print(f"Wow! {current_batsman.name} scored {user_team_run} runs")
+                position += 1
+                if position > 1:
+                    position = 0
                 current_batsman.run(user_team_run)
-                current_batsman = user_player_dict["user_player2"] if current_batsman == user_player_dict[
-                    "user_player1"] else user_player_dict["user_player1"]
+                current_batsman = playing_batsmen[position] if current_batsman == playing_batsmen[position-1] else playing_batsmen[position-1]
         else:
             sleep(0.5)
             print("Shoot! Your number matched! Your player scored 0 runs!!")
