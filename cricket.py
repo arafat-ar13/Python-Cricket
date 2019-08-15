@@ -38,9 +38,11 @@ for player in range(len(user_team.player_names)):
     count += 1
 
 # Creating a Toss simulation
+
 def toss():
-        choice = ["heads", "tails"]
-        return choice[randint(0, 1)]
+    choice = ["heads", "tails"]
+    return choice[randint(0, 1)]
+
 
 # Assigning Heads or Tails to both teams
 user_team.toss_choice = input("Heads or Tails: ").lower()
@@ -63,11 +65,14 @@ print(f"You are {user_team.playing}")
 print(f"Opposing team is {opposing_team.playing}")
 
 # Beginning game
-user_player1 = Player(user_team.player_names[0])
-user_player2 = Player(user_team.player_names[1])
+user_player_dict = dict()
+opposing_player_dict = dict()
 
-opposing_team_player1 = Player(opposing_team.player_names[0])
-opposing_team_player2 = Player(opposing_team.player_names[1])
+for player in range(1, len(user_team.player_names)+1):
+    user_player_dict[f"user_player{player}"] = Player(
+        user_team.player_names[player-1])
+    opposing_player_dict[f"Player {player}"] = Player(
+        opposing_team.player_names[player-1])
 
 
 # First innings
@@ -75,7 +80,7 @@ balls = 15
 wickets = len(user_team.player_names) - 1
 
 if user_team.playing == "Batting":
-    current_batsman = user_player1
+    current_batsman = user_player_dict["user_player1"]
     while balls != 0:
         user_team_run = int(input("Enter your run number: "))
         run = randint(0, 6)
@@ -88,7 +93,8 @@ if user_team.playing == "Batting":
                 print(
                     f"Wow! {current_batsman.name} scored {user_team_run} runs")
                 current_batsman.run(user_team_run)
-                current_batsman = user_player2 if current_batsman == user_player1 else user_player1
+                current_batsman = user_player_dict["user_player2"] if current_batsman == user_player_dict[
+                    "user_player1"] else user_player_dict["user_player1"]
         else:
             sleep(0.5)
             print("Shoot! Your number matched! Your player scored 0 runs!!")
@@ -99,11 +105,11 @@ if user_team.playing == "Batting":
 
     print()
     sleep(1)
-    print(user_player1.player_info_dict)
-    print(user_player2.player_info_dict)
+    print(user_player_dict["user_player1"].player_info_dict)
+    print(user_player_dict["user_player2"].player_info_dict)
 
 else:
-    current_batsman = opposing_team_player1
+    current_batsman = opposing_player_dict["Player 1"]
     while balls != 0:
         user_team_ball = int(input("Enter your ball number: "))
         run = randint(0, 6)
@@ -118,7 +124,8 @@ else:
                 sleep(0.5)
                 print(f"Wow! {current_batsman.name} scored {run} runs")
                 current_batsman.run(run)
-                current_batsman = opposing_team_player2 if current_batsman == opposing_team_player1 else opposing_team_player1
+                current_batsman = opposing_player_dict["Player 2"] if current_batsman == opposing_player_dict[
+                    "Player 1"] else opposing_player_dict["Player 1"]
         else:
             sleep(0.5)
             print("You hit him! The opposing playing didn't score anything!!")
@@ -129,8 +136,8 @@ else:
 
     print()
     sleep(1)
-    print(opposing_team_player1.player_info_dict)
-    print(opposing_team_player2.player_info_dict)
+    print(opposing_player_dict["Player 1"].player_info_dict)
+    print(opposing_player_dict["Player 2"].player_info_dict)
 
 first_innings_done = True
 
@@ -150,7 +157,7 @@ if first_innings_done:
 
     # Staring innings
     if user_team.playing == "Balling":
-        current_batsman = opposing_team_player1
+        current_batsman = opposing_player_dict["Player 1"]
         while balls != 0:
             user_team_ball = int(input("Enter your ball number: "))
             run = randint(0, 6)
@@ -163,7 +170,8 @@ if first_innings_done:
                 else:
                     print(f"Wow! {current_batsman.name} scored {run} runs")
                     current_batsman.run(run)
-                    current_batsman = opposing_team_player2 if current_batsman == opposing_team_player1 else opposing_team_player1
+                    current_batsman = opposing_player_dict["Player 2"] if current_batsman == opposing_player_dict[
+                        "Player 1"] else opposing_player_dict["Player 1"]
             else:
                 sleep(0.5)
                 print("You hit him!")
@@ -173,11 +181,11 @@ if first_innings_done:
 
         print()
         sleep(1)
-        print(opposing_team_player1.player_info_dict)
-        print(opposing_team_player2.player_info_dict)
+        print(opposing_player_dict["Player 1"].player_info_dict)
+        print(opposing_player_dict["Player 2"].player_info_dict)
 
     else:
-        current_batsman = user_player1
+        current_batsman = user_player_dict["user_player1"]
         while balls != 0:
             user_team_run = int(input("Enter your run number: "))
             run = randint(0, 6)
@@ -190,7 +198,8 @@ if first_innings_done:
                     print(
                         f"Wow! {current_batsman.name} scored {user_team_run} runs")
                     current_batsman.run(user_team_run)
-                    current_batsman = user_player2 if current_batsman == user_player1 else user_player1
+                    current_batsman = user_player_dict["user_player2"] if current_batsman == user_player_dict[
+                        "user_player1"] else user_player_dict["user_player1"]
             else:
                 sleep(0.5)
                 print("Shoot! You got hit!!")
@@ -201,14 +210,14 @@ if first_innings_done:
 
         print()
         sleep(1)
-        print(user_player1.player_info_dict)
-        print(user_player2.player_info_dict)
+        print(user_player_dict["user_player1"].player_info_dict)
+        print(user_player_dict["user_player2"].player_info_dict)
 
 
-user_team.team_score([user_player1.player_info_dict[user_player1.name],
-                      user_player2.player_info_dict[user_player2.name]])
-opposing_team.team_score([opposing_team_player1.player_info_dict[opposing_team_player1.name],
-                          opposing_team_player2.player_info_dict[opposing_team_player2.name]])
+user_team.team_score([user_player_dict["user_player1"].player_info_dict[user_player_dict["user_player1"].name],
+                      user_player_dict["user_player2"].player_info_dict[user_player_dict["user_player2"].name]])
+opposing_team.team_score([opposing_player_dict["Player 1"].player_info_dict[opposing_player_dict["Player 1"].name],
+                          opposing_player_dict["Player 2"].player_info_dict[opposing_player_dict["Player 2"].name]])
 
 sleep(1)
 print(user_team.total_team_run)
