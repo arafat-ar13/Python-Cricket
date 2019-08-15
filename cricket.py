@@ -103,8 +103,6 @@ if user_team.playing == "Batting":
         sleep(1)
         balls -= 1
 
-    user_team.first_session_done = True
-
 else:
     current_batsman = opposing_team_player1
     while balls != 0:
@@ -130,9 +128,8 @@ else:
         sleep(1)
         balls -= 1
 
-    opposing_team.first_session_done = True
-
 first_session_done = True
+
 
 # Session two
 print()
