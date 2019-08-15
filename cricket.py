@@ -1,14 +1,6 @@
 from random import randint
 from time import sleep
 
-# creating a toss class
-
-
-class Toss():
-    def toss(self):
-        choice = ["heads", "tails"]
-        return choice[randint(0, 1)]
-
 
 class Team():
     def __init__(self, team_name, player_names=list()):
@@ -45,15 +37,17 @@ for player in range(len(user_team.player_names)):
     opposing_team.player_names.append("Player " + str(count))
     count += 1
 
-# Initiating a Toss simulation
-toss = Toss()
+# Creating a Toss simulation
+def toss():
+        choice = ["heads", "tails"]
+        return choice[randint(0, 1)]
 
 # Assigning Heads or Tails to both teams
 user_team.toss_choice = input("Heads or Tails: ").lower()
 opposing_team.toss_choice = "heads" if user_team.toss_choice == "tails" else "tails"
 
 # Let's check who won and who'll play what
-if user_team.toss_choice == toss.toss():
+if user_team.toss_choice == toss():
     print("You have won the toss")
     user_choice = input("Bat or Ball: ")
     user_team.playing = 'Batting' if user_choice == "Bat" else "Balling"
@@ -76,7 +70,7 @@ opposing_team_player1 = Player(opposing_team.player_names[0])
 opposing_team_player2 = Player(opposing_team.player_names[1])
 
 
-# First session
+# First innings
 balls = 15
 wickets = len(user_team.player_names) - 1
 
@@ -97,11 +91,16 @@ if user_team.playing == "Batting":
                 current_batsman = user_player2 if current_batsman == user_player1 else user_player1
         else:
             sleep(0.5)
-            print("Shoot! You got hit!!")
+            print("Shoot! Your number matched! Your player scored 0 runs!!")
             current_batsman.run(0)
 
         sleep(1)
         balls -= 1
+
+    print()
+    sleep(1)
+    print(user_player1.player_info_dict)
+    print(user_player2.player_info_dict)
 
 else:
     current_batsman = opposing_team_player1
@@ -122,16 +121,21 @@ else:
                 current_batsman = opposing_team_player2 if current_batsman == opposing_team_player1 else opposing_team_player1
         else:
             sleep(0.5)
-            print("You hit him!")
+            print("You hit him! The opposing playing didn't score anything!!")
             current_batsman.run(0)
 
         sleep(1)
         balls -= 1
 
-first_session_done = True
+    print()
+    sleep(1)
+    print(opposing_team_player1.player_info_dict)
+    print(opposing_team_player2.player_info_dict)
+
+first_innings_done = True
 
 
-# Session two
+# Second innings
 print()
 sleep(1)
 print("The first session was done. We will now proceed to the next session")
@@ -140,11 +144,11 @@ print("The first session was done. We will now proceed to the next session")
 balls = 15
 wickets = len(user_team.player_names) - 1
 
-if first_session_done:
+if first_innings_done:
     user_team.playing = "Balling" if user_team.playing == "Batting" else "Batting"
     opposing_team.playing = "Batting" if opposing_team.playing == "Balling" else "Balling"
 
-    # Staring session
+    # Staring innings
     if user_team.playing == "Balling":
         current_batsman = opposing_team_player1
         while balls != 0:
@@ -166,6 +170,11 @@ if first_session_done:
                 current_batsman.run(0)
 
             balls -= 1
+
+        print()
+        sleep(1)
+        print(opposing_team_player1.player_info_dict)
+        print(opposing_team_player2.player_info_dict)
 
     else:
         current_batsman = user_player1
@@ -190,14 +199,11 @@ if first_session_done:
             sleep(1)
             balls -= 1
 
+        print()
+        sleep(1)
+        print(user_player1.player_info_dict)
+        print(user_player2.player_info_dict)
 
-# Displaying a bit of team and player information
-sleep(1)
-print(user_player1.player_info_dict)
-print(user_player2.player_info_dict)
-sleep(1)
-print(opposing_team_player1.player_info_dict)
-print(opposing_team_player2.player_info_dict)
 
 user_team.team_score([user_player1.player_info_dict[user_player1.name],
                       user_player2.player_info_dict[user_player2.name]])
