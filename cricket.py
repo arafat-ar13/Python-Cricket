@@ -15,7 +15,7 @@ class Team():
 
     def view_players(self):
         for name in self.player_names:
-            print(name) 
+            print(name)
 
     def team_score(self, score):
         total_score = sum(score)
@@ -25,11 +25,11 @@ class Player():
     def __init__(self, name):
         self.name = name
         self.player_info_dict = {self.name: 0}
-    
+
     def run(self, score):
         self.player_info_dict[self.name] += score
-        
-      
+
+
 user_team = Team(input("Enter your team name: "), player_names=input("Enter your players, seperated by commas: ").split(", "))
 opposing_team = Team("Opposing Team")
 
@@ -39,7 +39,7 @@ count = 1
 for player in range(len(user_team.player_names)):
     opposing_team.player_names.append("Player " + str(count))
     count += 1
- 
+
 # Initiating a Toss simulation
 toss = Toss()
 
@@ -122,18 +122,18 @@ else:
 
         sleep(1)
         balls -= 1
-    
+
     opposing_team.first_session_done = True
 
 
-# Session two 
+# Session two
 print()
 sleep(1)
 print("The first session was done. We will now proceed to the next session")
 
 
 balls = 15
-wickets = len(user_team.player_names) - 1 
+wickets = len(user_team.player_names) - 1
 
 if user_team.first_session_done == True or opposing_team.first_session_done == True:
     user_team.playing = "Balling" if user_team.playing == "Batting" else "Batting"
@@ -163,6 +163,7 @@ if user_team.first_session_done == True or opposing_team.first_session_done == T
             balls -= 1
 
 
+# Displaying a bit of team and player information
 sleep(1)
 print(user_player1.player_info_dict)
 print(user_player2.player_info_dict)
