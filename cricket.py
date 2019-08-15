@@ -132,6 +132,7 @@ else:
 
     opposing_team.first_session_done = True
 
+first_session_done = True
 
 # Session two
 print()
@@ -142,7 +143,7 @@ print("The first session was done. We will now proceed to the next session")
 balls = 15
 wickets = len(user_team.player_names) - 1
 
-if user_team.first_session_done == True or opposing_team.first_session_done == True:
+if first_session_done:
     user_team.playing = "Balling" if user_team.playing == "Batting" else "Batting"
     opposing_team.playing = "Batting" if opposing_team.playing == "Balling" else "Balling"
 
@@ -167,6 +168,29 @@ if user_team.first_session_done == True or opposing_team.first_session_done == T
                 print("You hit him!")
                 current_batsman.run(0)
 
+            balls -= 1
+
+    else:
+        current_batsman = user_player1
+        while balls != 0:
+            user_team_run = int(input("Enter your run number: "))
+            run = randint(0, 6)
+            if run != user_team_run:
+                if user_team_run % 2 == 0:
+                    print(
+                        f"Wow! {current_batsman.name} scored {user_team_run} runs")
+                    current_batsman.run(user_team_run)
+                else:
+                    print(
+                        f"Wow! {current_batsman.name} scored {user_team_run} runs")
+                    current_batsman.run(user_team_run)
+                    current_batsman = user_player2 if current_batsman == user_player1 else user_player1
+            else:
+                sleep(0.5)
+                print("Shoot! You got hit!!")
+                current_batsman.run(0)
+
+            sleep(1)
             balls -= 1
 
 
