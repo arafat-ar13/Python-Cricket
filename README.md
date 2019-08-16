@@ -18,10 +18,15 @@ Run cricket.py on any text editor to get started
 # Balling rules
 9) When balling, you are again asked to enter an integer number. If your number matches the random number that the opposing batsman scores, the current opposing batsman gets no run at all. But if they don't match, the opposing batsman will score the run that he/she random-created.
 
-# Future upgrades
-* Include as many players as the user intends and the opposing team will change to match the user team players.
-* When including more players, a system has to be created for "out". Unlike a player switch during odd scores, the out will permanently remove the current batsman from the playing field and bring the next player.
-* If all the players of a team gets out before the balls are completed, the team will cease to bat.
+# Recent updates
+I want to congratulate myself for all the implementations I have made to this game recently. Those include:
+* You can now play with as many players as you intend. Bring in a thousand people and my game will also create a thousand players of its own to show you who's the boss :) 
+* I have implemented a system that takes control when all your players are out and you still have balls left. You will cease to bat and the next innings will start.
+* After each innings, the program will show a list of the players who have scored. For example, if you bat first and your players have scored well, after your batting is done, the program will show which players have scored. If you have any player who hasn't scored anything, he/she will not be shown. This also works for when the opposing team is batting.
+* Made the game fully fledged and playable.
 
-# Cheat sheet
-When batting you can enter any integer number you want like 13 or 35 or even over a thousand. This is valid for this game because the baller will only generate random numbers from 0 to 6. So if you enter any number above that, they just won't match! (Will be fixing this real soon. Life ain't that easy!)
+# Future upgrades
+* Make an update for when both the teams score the same run. In which case, a special session will begin with only 6 balls.
+* For now, suppose you are batting after the opposing team and you surpass your target, you still have to wait for the balls to finish. After the second innings is done, then you can see that you have won. This is same for when the opponent is batting after you. In a future update, I will fix this and make sure that the game ends and the winner is declared whenever a team surpasses their target.
+
+# Happy playing!
