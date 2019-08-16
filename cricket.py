@@ -76,7 +76,7 @@ for player in range(1, len(user_team.player_names)+1):
 
 
 # First innings
-balls = 15
+balls = 30
 wickets = len(user_team.player_names) - 1
 
 if user_team.playing == "Batting":
@@ -84,7 +84,11 @@ if user_team.playing == "Batting":
     playing_batsmen = [user_player_dict["user_player1"], user_player_dict["user_player2"]]
     current_batsman = playing_batsmen[position]
     while balls != 0:
-        user_team_run = int(input("Enter your run number: "))
+        user_team_run = int(input(f"Playing: {current_batsman.name}. Enter your run number: "))
+        print()
+        if user_team_run > 6:
+            while user_team > 6:
+                user_team_run = int(input("You cannot enter number larger than 6"))
         run = randint(0, 6)
         if run != user_team_run:
             if user_team_run % 2 == 0:
@@ -99,9 +103,15 @@ if user_team.playing == "Batting":
                 current_batsman.run(user_team_run)
                 current_batsman = playing_batsmen[position] if current_batsman == playing_batsmen[position-1] else playing_batsmen[position-1]
         else:
+            position += 1
+            if position > 1:
+                position = 0
             sleep(0.5)
             print("Shoot! Your number matched! Your player scored 0 runs!!")
-            current_batsman.run(0)
+            playing_batsmen.reverse()
+            playing_batsmen.pop()
+            playing_batsmen.append(user_player_dict["user_player3"])
+            current_batsman = playing_batsmen[position] if current_batsman == playing_batsmen[position-1] else playing_batsmen[position-1]
 
         sleep(1)
         balls -= 1
