@@ -76,7 +76,7 @@ for player in range(1, len(user_team.player_names)+1):
 
 
 # First innings
-balls = 30
+balls = 18
 wickets = len(user_team.player_names) - 1
 
 if user_team.playing == "Batting":
@@ -119,8 +119,11 @@ if user_team.playing == "Batting":
 
     print()
     sleep(1)
-    print(user_player_dict["user_player1"].player_info_dict)
-    print(user_player_dict["user_player2"].player_info_dict)
+
+    for player_name in user_player_dict:
+        for value in user_player_dict[player_name].player_info_dict.values():
+            if value > 0:
+                print(user_player_dict[player_name].player_info_dict)
 
 else:
     current_batsman = opposing_player_dict["Player 1"]
@@ -174,6 +177,8 @@ if first_innings_done:
         current_batsman = opposing_player_dict["Player 1"]
         while balls != 0:
             user_team_ball = int(input("Enter your ball number: "))
+            # while user_team_ball > 6:
+            #     user_team_ball = int(input("No cheating bitch: "))
             run = randint(0, 6)
             if run != user_team_ball:
                 sleep(0.5)
@@ -191,7 +196,7 @@ if first_innings_done:
                 print("You hit him!")
                 current_batsman.run(0)
 
-            balls -= 1
+        
 
         print()
         sleep(1)
