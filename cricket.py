@@ -13,8 +13,7 @@ class Team():
             print(name)
 
     def team_score(self, score):
-        total_score = sum(score)
-        self.total_team_run[self.team_name] += total_score
+        self.total_team_run[self.team_name] += score
 
 
 class Player():
@@ -76,7 +75,7 @@ for player in range(1, len(user_team.player_names)+1):
 
 
 # First innings
-balls = 60
+balls = 10
 
 if user_team.playing == "Batting":
     wickets = len(user_team.player_names) - 1
@@ -94,6 +93,7 @@ if user_team.playing == "Batting":
             run = randint(0, 6)
             if run != user_team_run:
                 if user_team_run % 2 == 0:
+                    sleep(0.5)
                     print(f"Wow! {current_batsman.name} scored {user_team_run} runs")
                     current_batsman.run(user_team_run)
                 else:
@@ -126,41 +126,80 @@ if user_team.playing == "Batting":
     print()
     sleep(1)
 
+
+    # Shows the scores of the players who got to play and score anything above zero in the innings.
+    # And also calculating total team run
     for player_name in user_player_dict:
         for value in user_player_dict[player_name].player_info_dict.values():
             if value > 0:
                 print(user_player_dict[player_name].player_info_dict)
+                user_team.team_score(value)
+    print()
+    sleep(0.5)
+    # Displaying team total run
+    print(user_team.total_team_run)
 
 else:
-    current_batsman = opposing_player_dict["Player 1"]
-    while balls != 0:
-        user_team_ball = int(input("Enter your ball number: "))
-        run = randint(0, 6)
-        if run != user_team_ball:
-            if run % 2 == 0:
-                print("You missed!")
-                sleep(0.5)
-                print(f"Wow! {current_batsman.name} scored {run} runs")
-                current_batsman.run(run)
+    wickets = len(opposing_team.player_names) - 1
+    position = 0
+    playing_batsmen = [opposing_player_dict["Player 1"], opposing_player_dict["Player 2"]]
+    current_batsman = playing_batsmen[position]
+    next_player_position = 0
+    while balls > 0:
+        if wickets > 0:
+            user_team_ball = int(input("Enter your ball number: "))
+            print()
+            while user_team_ball > 6:
+                user_team_ball = int(input("Unless you don't want the opponent to get out, keep doin' your shitty stuff"))
+            run = randint(0, 6)
+            if run != user_team_ball:
+                if run % 2 == 0:
+                    print("You missed!")
+                    sleep(0.5)
+                    print(f"{current_batsman.name} scored {run} runs")
+                    current_batsman.run(run)
+                else:
+                    print("You missed!")
+                    sleep(0.5)
+                    print(f"{current_batsman.name} scored {run} runs")
+                    position += 1
+                    if position > 1:
+                        position = 0
+                    current_batsman.run(run)
+                    current_batsman = playing_batsmen[position] if current_batsman == playing_batsmen[position-1] else playing_batsmen[position-1]
             else:
-                print("You missed!")
-                sleep(0.5)
-                print(f"Wow! {current_batsman.name} scored {run} runs")
-                current_batsman.run(run)
-                current_batsman = opposing_player_dict["Player 2"] if current_batsman == opposing_player_dict[
-                    "Player 1"] else opposing_player_dict["Player 1"]
+                wickets -= 1
+                if wickets > 0:
+                    next_player = ["Player " + str(x) for x in range(3, len(opposing_team.player_names)+1)] 
+                    sleep(0.5)
+                    print("Damn! You took a wicket!!")
+                    playing_batsmen.remove(playing_batsmen[position])
+                    playing_batsmen.append(opposing_player_dict[next_player[next_player_position]])
+                    next_player_position += 1
+                    current_batsman = playing_batsmen[position] if current_batsman == playing_batsmen[position-1] else playing_batsmen[position-1]
+                    position += 1
+                    if position > 1:
+                        position = 0
         else:
-            sleep(0.5)
-            print("You hit him! The opposing playing didn't score anything!!")
-            current_batsman.run(0)
+            print(f"The opponent is all out with {balls} balls left")
+            balls = 0
+
 
         sleep(1)
         balls -= 1
 
     print()
     sleep(1)
-    print(opposing_player_dict["Player 1"].player_info_dict)
-    print(opposing_player_dict["Player 2"].player_info_dict)
+    
+    for player_name in opposing_player_dict:
+        for value in opposing_player_dict[player_name].player_info_dict.values():
+            if value > 0:
+                print(opposing_player_dict[player_name].player_info_dict)
+                opposing_team.team_score(value)
+
+    print()
+    sleep(0.5)
+    print(opposing_team.total_team_run)
 
 first_innings_done = True
 
@@ -172,7 +211,6 @@ print("The first session was done. We will now proceed to the next session")
 
 
 balls = 15
-wickets = len(user_team.player_names) - 1
 
 if first_innings_done:
     user_team.playing = "Balling" if user_team.playing == "Batting" else "Batting"
@@ -180,70 +218,129 @@ if first_innings_done:
 
     # Staring innings
     if user_team.playing == "Balling":
-        current_batsman = opposing_player_dict["Player 1"]
-        while balls != 0:
-            user_team_ball = int(input("Enter your ball number: "))
-            # while user_team_ball > 6:
-            #     user_team_ball = int(input("No cheating bitch: "))
-            run = randint(0, 6)
-            if run != user_team_ball:
-                sleep(0.5)
-                print("You missed!")
-                if run % 2 == 0:
-                    print(f"Wow! {current_batsman.name} scored {run} runs")
-                    current_batsman.run(run)
+        wickets = len(opposing_team.player_names) - 1
+        position = 0
+        playing_batsmen = [opposing_player_dict["Player 1"], opposing_player_dict["Player 2"]]
+        current_batsman = playing_batsmen[position]
+        next_player_position = 0
+        while balls > 0:
+            if wickets > 0:
+                user_team_ball = int(input("Enter your ball number: "))
+                print()
+                while user_team_ball > 6:
+                    user_team_ball = int(input("Unless you don't want the opponent to get out, keep doin' your shitty stuff"))
+                run = randint(0, 6)
+                if run != user_team_ball:
+                    if run % 2 == 0:
+                        print("You missed!")
+                        sleep(0.5)
+                        print(f"{current_batsman.name} scored {run} runs")
+                        current_batsman.run(run)
+                    else:
+                        print("You missed!")
+                        sleep(0.5)
+                        print(f"{current_batsman.name} scored {run} runs")
+                        position += 1
+                        if position > 1:
+                            position = 0
+                        current_batsman.run(run)
+                        current_batsman = playing_batsmen[position] if current_batsman == playing_batsmen[position-1] else playing_batsmen[position-1]
                 else:
-                    print(f"Wow! {current_batsman.name} scored {run} runs")
-                    current_batsman.run(run)
-                    current_batsman = opposing_player_dict["Player 2"] if current_batsman == opposing_player_dict[
-                        "Player 1"] else opposing_player_dict["Player 1"]
+                    wickets -= 1
+                    if wickets > 0:
+                        next_player = ["Player " + str(x) for x in range(3, len(opposing_team.player_names)+1)] 
+                        sleep(0.5)
+                        print("Damn! You took a wicket!!")
+                        playing_batsmen.remove(playing_batsmen[position])
+                        playing_batsmen.append(opposing_player_dict[next_player[next_player_position]])
+                        next_player_position += 1
+                        current_batsman = playing_batsmen[position] if current_batsman == playing_batsmen[position-1] else playing_batsmen[position-1]
+                        position += 1
+                        if position > 1:
+                            position = 0
             else:
-                sleep(0.5)
-                print("You hit him!")
-                current_batsman.run(0)
+                print(f"The opponent is all out with {balls} balls left")
+                balls = 0
 
-        
-
-        print()
-        sleep(1)
-        print(opposing_player_dict["Player 1"].player_info_dict)
-        print(opposing_player_dict["Player 2"].player_info_dict)
-
-    else:
-        current_batsman = user_player_dict["user_player1"]
-        while balls != 0:
-            user_team_run = int(input("Enter your run number: "))
-            run = randint(0, 6)
-            if run != user_team_run:
-                if user_team_run % 2 == 0:
-                    print(
-                        f"Wow! {current_batsman.name} scored {user_team_run} runs")
-                    current_batsman.run(user_team_run)
-                else:
-                    print(
-                        f"Wow! {current_batsman.name} scored {user_team_run} runs")
-                    current_batsman.run(user_team_run)
-                    current_batsman = user_player_dict["user_player2"] if current_batsman == user_player_dict[
-                        "user_player1"] else user_player_dict["user_player1"]
-            else:
-                sleep(0.5)
-                print("Shoot! You got hit!!")
-                current_batsman.run(0)
 
             sleep(1)
             balls -= 1
 
         print()
         sleep(1)
-        print(user_player_dict["user_player1"].player_info_dict)
-        print(user_player_dict["user_player2"].player_info_dict)
+        
+        for player_name in opposing_player_dict:
+            for value in opposing_player_dict[player_name].player_info_dict.values():
+                if value > 0:
+                    print(opposing_player_dict[player_name].player_info_dict)
+                    opposing_team.team_score(value)
+        
+        print()
+        sleep(0.5)
+        print(opposing_team.total_team_run)
+
+    else:
+        wickets = len(user_team.player_names) - 1
+        position = 0
+        playing_batsmen = [user_player_dict["user_player1"], user_player_dict["user_player2"]]
+        current_batsman = playing_batsmen[position]
+        next_player_position = 0
+        while balls > 0:
+            if wickets > 0:
+                user_team_run = int(input(f"Playing: {current_batsman.name}. Enter your run number: "))
+                print()
+                if user_team_run > 6:
+                    while user_team_run > 6:
+                        user_team_run = int(input("You cannot enter number larger than 6"))
+                run = randint(0, 6)
+                if run != user_team_run:
+                    if user_team_run % 2 == 0:
+                        sleep(0.5)
+                        print(f"Wow! {current_batsman.name} scored {user_team_run} runs")
+                        current_batsman.run(user_team_run)
+                    else:
+                        print(f"Wow! {current_batsman.name} scored {user_team_run} runs")
+                        position += 1
+                        if position > 1:
+                            position = 0
+                        current_batsman.run(user_team_run)
+                        current_batsman = playing_batsmen[position] if current_batsman == playing_batsmen[position-1] else playing_batsmen[position-1]
+                else:
+                    wickets -= 1
+                    if wickets > 0:
+                        next_player = ["user_player" + str(x) for x in range(3, len(user_team.player_names)+1)]
+                        sleep(0.5)
+                        print("Shoot! Your player is out!!")
+                        playing_batsmen.remove(playing_batsmen[position])
+                        playing_batsmen.append(user_player_dict[next_player[next_player_position]]) 
+                        next_player_position += 1
+                        current_batsman = playing_batsmen[position] if current_batsman == playing_batsmen[position-1] else playing_batsmen[position-1]
+                        position += 1
+                        if position > 1:
+                            position = 0
+            else:
+                print(f"Damn! Your players have all been out with {balls} balls left")
+                balls = 0
+
+            sleep(1)
+            balls -= 1
+
+        print()
+        sleep(1)
+
+        # Shows the scores of the players who got to play and score anything above zero in the innings.
+        for player_name in user_player_dict:
+            for value in user_player_dict[player_name].player_info_dict.values():
+                if value > 0:
+                    print(user_player_dict[player_name].player_info_dict)
+                    user_team.team_score(value)
+
+        print()
+        sleep(0.5)
+        print(user_team.total_team_run)
 
 
-user_team.team_score([user_player_dict["user_player1"].player_info_dict[user_player_dict["user_player1"].name],
-                      user_player_dict["user_player2"].player_info_dict[user_player_dict["user_player2"].name]])
-opposing_team.team_score([opposing_player_dict["Player 1"].player_info_dict[opposing_player_dict["Player 1"].name],
-                          opposing_player_dict["Player 2"].player_info_dict[opposing_player_dict["Player 2"].name]])
-
+print()
 sleep(1)
 print(user_team.total_team_run)
 sleep(1)
