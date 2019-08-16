@@ -83,17 +83,17 @@ if user_team.playing == "Batting":
     position = 0
     playing_batsmen = [user_player_dict["user_player1"], user_player_dict["user_player2"]]
     current_batsman = playing_batsmen[position]
+    next_player_position = 0
     while balls != 0:
         user_team_run = int(input(f"Playing: {current_batsman.name}. Enter your run number: "))
         print()
-        if user_team_run > 6:
-            while user_team > 6:
-                user_team_run = int(input("You cannot enter number larger than 6"))
+        # if user_team_run > 6:
+        #     while user_team_run > 6:
+        #         user_team_run = int(input("You cannot enter number larger than 6"))
         run = randint(0, 6)
         if run != user_team_run:
             if user_team_run % 2 == 0:
-                print(
-                    f"Wow! {current_batsman.name} scored {user_team_run} runs")
+                print(f"Wow! {current_batsman.name} scored {user_team_run} runs")
                 current_batsman.run(user_team_run)
             else:
                 print(f"Wow! {current_batsman.name} scored {user_team_run} runs")
@@ -103,15 +103,16 @@ if user_team.playing == "Batting":
                 current_batsman.run(user_team_run)
                 current_batsman = playing_batsmen[position] if current_batsman == playing_batsmen[position-1] else playing_batsmen[position-1]
         else:
+            next_player = ["user_player" + str(x) for x in range(3, len(user_team.player_names)+1)]
+            sleep(0.5)
+            print("Shoot! Your number matched! Your player scored 0 runs!!")
+            playing_batsmen.remove(playing_batsmen[position])
+            playing_batsmen.append(user_player_dict[next_player[next_player_position]])
+            next_player_position += 1
+            current_batsman = playing_batsmen[position] if current_batsman == playing_batsmen[position-1] else playing_batsmen[position-1]
             position += 1
             if position > 1:
                 position = 0
-            sleep(0.5)
-            print("Shoot! Your number matched! Your player scored 0 runs!!")
-            playing_batsmen.reverse()
-            playing_batsmen.pop()
-            playing_batsmen.append(user_player_dict["user_player3"])
-            current_batsman = playing_batsmen[position] if current_batsman == playing_batsmen[position-1] else playing_batsmen[position-1]
 
         sleep(1)
         balls -= 1
