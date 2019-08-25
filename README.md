@@ -5,7 +5,7 @@ Run cricket.py on any text editor to get started
 
 # How to play
 1) Tell the game your team name and your player name.
-2) [OPTIONAL] Tell the game the name of the opponent team. If you deny this option, opponent team will simply be name "Opposing Team"
+2) [OPTIONAL] Tell the game the name of the opponent team. If you deny this option, opponent team will simply be named "Opposing Team"
 3) Based on your number of players, the game will auto-create the EXACT same number of players to match your team. So, it's quite scalable.
 4) You enter your toss preference.
 5) If you win, you get to choose to bat or ball.
@@ -19,7 +19,7 @@ Run cricket.py on any text editor to get started
 10) When batting, in the second innings, if a team surpasses their target, they are immediately declared winners and the game will stop.
 
 # Bowling rules
-11) When bowling, you are again asked to enter an integer number. If your number matches the random number that the opposing batsman scores, the current opposing batsman gets out and they are permanently replaced by another player. But if they don't match, the opposing batsman will score the run that he/she random-created.
+11) When bowling, you are again asked to enter an integer number. If your number matches the random number that the opposing batsman scores, the current opposing batsman gets out and is permanently replaced by another player. But if they don't match, the opposing batsman will score the run that he/she random-created.
 
 # Recent updates
 I want to congratulate myself for all the implementations I have made to this game recently. Those include:
@@ -30,7 +30,7 @@ I want to congratulate myself for all the implementations I have made to this ga
 
 
 # Future plans
-* Now, the order of your player in what you have fed my game when setting up your players and that is unchangable. In the future, I will include options for you (the user) to choose who two players to send to bat first and when someone gets out, you will again get to choose who next batsman to send. This will be the next big update. (It'll be quite not-so-easy tbh!)
+* The order of your players is what you have fed my game when setting up your players and that is unchangable, for now. In the future, I will include options for you (the user) to choose which two players to send to bat first and when someone gets out, you will again get to choose which batsman to send next. This will be the next big update. (It'll be quite not-so-easy tbh!)
 * No one really quite likes or gets impressed by a text-based game (or any program for that matter) and I am sorry but I just don't know much GUI programming yet. So, in the future, I will include an option to autoplay when the user is batting or bowling. Happy now?
 * Now, when any team wins, the basic text that gets displayed is "Team A won by [run] runs". I wish to change that someday to reflect the real Cricket game where they say "Team A won by [wicket] wickets" or "Team B won by [run] runs". That's a complex thing to implement and so will take a while. (This feature is minor and will get less attention)
 
