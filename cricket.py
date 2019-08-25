@@ -28,7 +28,7 @@ class Player():
 user_team = Team(input("Enter your team name: "), player_names=input(
     "Enter your players, seperated by commas: ").split(", "))
 
-sleep(1)
+sleep(0.3)
 oppo_team = input("Do you have any specific team you want to play against?: ")
 oppo_team = input("Enter the team name: ") if oppo_team in ["y", "yes", "yeah", "okay", "sure"] else "Opposing Team"
 opposing_team = Team(oppo_team)
@@ -43,7 +43,7 @@ for player in range(len(user_team.player_names)):
 sleep(0.5)
 # Getting the number of balls from the user
 overs = int(input("How many over(s)?: "))
-balls = overs * 6
+game_balls = overs * 6
 
 # Creating a Toss simulation
 
@@ -89,20 +89,28 @@ for player in range(1, len(user_team.player_names)+1):
     opposing_player_dict[f"Player {player}"] = Player(
         opposing_team.player_names[player-1])
 
+# Creating wickets
+user_wickets = opponent_wickets = len(user_team.player_names) - 1
 
 def batting(balls, first_innings=False):
-    wickets = len(user_team.player_names) - 1
+    global user_wickets
     position = 0
     playing_batsmen = [user_player_dict["user_player1"], user_player_dict["user_player2"]]
     current_batsman = playing_batsmen[position]
     next_player_position = 0
     while balls > 0:
-        if wickets > 0:
+        if user_wickets > 0:
+            if balls != game_balls:
+                if balls % 6 == 0:
+                    print()
+                    print("A over is done")
+                    print()
+                    current_batsman = playing_batsmen[position] if current_batsman == playing_batsmen[position-1] else playing_batsmen[position-1]
             user_team_run = int(input(f"Playing: {current_batsman.name}. Enter your run number: "))
             print()
             if user_team_run > 6:
                 while user_team_run > 6:
-                    user_team_run = int(input("You cannot enter number larger than 6"))
+                    user_team_run = int(input("You cannot enter number larger than 6 "))
             run = randint(0, 6)
             if run != user_team_run:
                 user_team.team_score(user_team_run)
@@ -118,8 +126,8 @@ def batting(balls, first_innings=False):
                     current_batsman.run(user_team_run)
                     current_batsman = playing_batsmen[position] if current_batsman == playing_batsmen[position-1] else playing_batsmen[position-1]
             else:
-                wickets -= 1
-                if wickets > 0:
+                user_wickets -= 1
+                if user_wickets > 0:
                     next_player = ["user_player" + str(x) for x in range(3, len(user_team.player_names)+1)]
                     sleep(0.5)
                     print("Shoot! Your player is out!!")
@@ -137,7 +145,7 @@ def batting(balls, first_innings=False):
                     sleep(1)
                     print("You have won the match!!")
                     balls = 0
-            
+
         else:
             print(f"Damn! Your players have all been out with {balls} balls left")
             balls = 0
@@ -150,7 +158,6 @@ def batting(balls, first_innings=False):
 
 
     # Shows the scores of the players who got to play and score anything above zero in the innings.
-    # And also calculating total team run
     if first_innings in [False, True]:
         for player_name in user_player_dict:
             for value in user_player_dict[player_name].player_info_dict.values():
@@ -169,19 +176,25 @@ def batting(balls, first_innings=False):
 
 
 def balling(balls, first_innings=False):
-    wickets = len(opposing_team.player_names) - 1
+    global opponent_wickets
     position = 0
     playing_batsmen = [opposing_player_dict["Player 1"], opposing_player_dict["Player 2"]]
     current_batsman = playing_batsmen[position]
     next_player_position = 0
     while balls > 0:
-        if wickets > 0:
+        if opponent_wickets > 0:
             user_team_ball = int(input("Enter your ball number: "))
             print()
             while user_team_ball > 6:
-                user_team_ball = int(input("Unless you don't want the opponent to get out, keep doin' your shitty stuff"))
+                user_team_ball = int(input("Unless you don't want the opponent to get out, keep doin' your shitty stuff "))
             run = randint(0, 6)
             if run != user_team_ball:
+                if balls != game_balls:
+                    if balls % 6 == 0:
+                        print()
+                        print("A over is done")
+                        print()
+                        current_batsman = playing_batsmen[position] if current_batsman == playing_batsmen[position-1] else playing_batsmen[position-1]
                 opposing_team.team_score(run)
                 if run % 2 == 0:
                     print("You missed!")
@@ -198,8 +211,8 @@ def balling(balls, first_innings=False):
                     current_batsman.run(run)
                     current_batsman = playing_batsmen[position] if current_batsman == playing_batsmen[position-1] else playing_batsmen[position-1]
             else:
-                wickets -= 1
-                if wickets > 0:
+                opponent_wickets -= 1
+                if opponent_wickets > 0:
                     next_player = ["Player " + str(x) for x in range(3, len(opposing_team.player_names)+1)] 
                     sleep(0.5)
                     print("Damn! You took a wicket!!")
@@ -217,6 +230,7 @@ def balling(balls, first_innings=False):
                     sleep(1)
                     print("You have lost the match")
                     balls = 0
+
 
         else:
             print(f"{opposing_team.team_name} is all out with {balls} balls left")
@@ -246,9 +260,9 @@ def balling(balls, first_innings=False):
 
 # Starting first innings
 if user_team.playing == "Batting":
-    batting(balls)
+    batting(game_balls)
 else:
-    balling(balls)
+    balling(game_balls)
     
 
 first_innings_done = True
@@ -266,9 +280,9 @@ if first_innings_done:
 
     # Staring innings
     if user_team.playing == "Balling":
-        balling(balls, first_innings_done)
+        balling(game_balls, first_innings_done)
     else:
-        batting(balls, first_innings_done)
+        batting(game_balls, first_innings_done)
 
 
 print()
@@ -279,13 +293,11 @@ print(opposing_team.total_team_run)
 
 
 # Let's see who won
-user_team_won = True if user_team.total_team_run[
-    user_team.team_name] > opposing_team.total_team_run[opposing_team.team_name] else False
+def winner_decider(user_team_run, opposing_team_run):
+    if user_team_run > opposing_team_run:
+        print(f"Congrats! Your team won by {user_team.total_team_run[user_team.team_name] - opposing_team.total_team_run[opposing_team.team_name]} runs")
+    else:
+        print(f"Better luck next time! {opposing_team.team_name} won by {opposing_team.total_team_run[opposing_team.team_name] - user_team.total_team_run[user_team.team_name]} runs")
 
 sleep(1)
-if user_team_won == True:
-    print(
-        f"Congrats! Your team won by {user_team.total_team_run[user_team.team_name] - opposing_team.total_team_run[opposing_team.team_name]} runs")
-else:
-    print(
-        f"Better luck next time! {opposing_team.team_name} won by {opposing_team.total_team_run[opposing_team.team_name] - user_team.total_team_run[user_team.team_name]} runs")
+winner_decider(user_team.total_team_run[user_team.team_name], opposing_team.total_team_run[opposing_team.team_name])
