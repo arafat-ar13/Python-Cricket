@@ -26,7 +26,7 @@ class Player():
 
 
 user_team = Team(input("Enter your team name: "), player_names=input(
-    "Enter your players, seperated by commas: ").split(", "))
+    "Enter your players, seperated by commas: ").title().split(", "))
 
 sleep(0.3)
 oppo_team = input("Do you have any specific team you want to play against?: ")
@@ -95,6 +95,7 @@ user_wickets = opponent_wickets = len(user_team.player_names) - 1
 def batting(balls, first_innings=False):
     global user_wickets
     position = 0
+    players_left = user_team.player_names
     played_batsmen = list()
     custom_players = input("Which two players are you willing to send first?: ").split(",")
     custom_players = [player.strip().title() for player in custom_players]
@@ -120,6 +121,10 @@ def batting(balls, first_innings=False):
         for dev_player_name, player_name in user_player_dict.items():
             if player_name.name == player:
                 playing_batsmen.append(user_player_dict[dev_player_name])
+
+    for player in playing_batsmen:
+        players_left.remove(player.name)
+
     current_batsman = playing_batsmen[position]
     while balls > 0:
         if current_batsman.name not in played_batsmen:
@@ -153,9 +158,12 @@ def batting(balls, first_innings=False):
             else:
                 user_wickets -= 1
                 if user_wickets > 0:
+                    if current_batsman.name not in custom_players:
+                        players_left.remove(current_batsman.name)
+                    playing_batsmen.remove(current_batsman)
                     sleep(0.5)
                     print("Shoot! Your player is out!!")
-                    next_player = input("Which player do you want to send next?: ").strip().title()
+                    next_player = input(f"Players left: {players_left}. Which player do you want to send next?: ").strip().title()
 
                     while next_player not in user_team.player_names or next_player in played_batsmen:
                         if next_player not in user_team.player_names:
@@ -166,8 +174,7 @@ def batting(balls, first_innings=False):
                     for dev_player_name, player_name in user_player_dict.items():
                         if player_name.name == next_player:
                             playing_batsmen.append(user_player_dict[dev_player_name]) 
-
-                    playing_batsmen.remove(current_batsman)       
+     
                     current_batsman = playing_batsmen[position] if current_batsman == playing_batsmen[position-1] else playing_batsmen[position-1]
                     position += 1
                     if position > 1:
@@ -177,7 +184,7 @@ def batting(balls, first_innings=False):
                 if user_team.total_team_run[user_team.team_name] > opposing_team.total_team_run[opposing_team.team_name]:
                     print()
                     sleep(1)
-                    print("You have won the match!!")
+                    print(f"You have won the match with {balls} left!!")
                     balls = 0
 
         else:
@@ -217,7 +224,7 @@ def balling(balls, first_innings=False):
     next_player_position = 0
     while balls > 0:
         if opponent_wickets > 0:
-            user_team_ball = int(input("Enter your ball number: "))
+            user_team_ball = int(input(f"Playing: {current_batsman.name}. Enter your ball number: "))
             print()
             while user_team_ball > 6:
                 user_team_ball = int(input("Unless you don't want the opponent to get out, keep doin' your shitty stuff "))
