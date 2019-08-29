@@ -30,7 +30,7 @@ user_team = Team(input("Enter your team name: "), player_names=input(
 
 sleep(0.3)
 oppo_team = input("Do you have any specific team you want to play against?: ")
-oppo_team = input("Enter the team name: ") if oppo_team in ["y", "yes", "yeah", "okay", "sure"] else "Opposing Team"
+oppo_team = input("Enter the team name: ") if oppo_team in ["y", "yes", "yeah", "okay", "sure", "yeah sure", "kay", "oh yeah"] else "Opposing Team"
 opposing_team = Team(oppo_team)
 
 # setting up opposing team players
@@ -95,10 +95,35 @@ user_wickets = opponent_wickets = len(user_team.player_names) - 1
 def batting(balls, first_innings=False):
     global user_wickets
     position = 0
-    playing_batsmen = [user_player_dict["user_player1"], user_player_dict["user_player2"]]
+    played_batsmen = list()
+    custom_players = input("Which two players are you willing to send first?: ").split(",")
+    custom_players = [player.strip().title() for player in custom_players]
+    while len(custom_players) > 2:
+        custom_players = input("You can't send more than two people to bat ").split(",")
+    player_existence_checker = list()
+    for player in custom_players:
+        if player not in user_team.player_names:
+            player_existence_checker.append(False)
+        else:
+            player_existence_checker.append(True)
+    while False in player_existence_checker:
+        custom_players = input("The player you entered must be in your initial player list: ").split(",")
+        custom_players = [player.strip().title() for player in custom_players]
+        for index, player in enumerate(custom_players):
+            if player not in user_team.player_names:
+                player_existence_checker[index] = False
+            else:
+                player_existence_checker[index] = True
+    custom_players = [player.strip().title() for player in custom_players]
+    playing_batsmen = list()
+    for player in custom_players:
+        for dev_player_name, player_name in user_player_dict.items():
+            if player_name.name == player:
+                playing_batsmen.append(user_player_dict[dev_player_name])
     current_batsman = playing_batsmen[position]
-    next_player_position = 0
     while balls > 0:
+        if current_batsman.name not in played_batsmen:
+            played_batsmen.append(current_batsman.name)
         if user_wickets > 0:
             if balls != game_balls:
                 if balls % 6 == 0:
@@ -128,12 +153,21 @@ def batting(balls, first_innings=False):
             else:
                 user_wickets -= 1
                 if user_wickets > 0:
-                    next_player = ["user_player" + str(x) for x in range(3, len(user_team.player_names)+1)]
                     sleep(0.5)
                     print("Shoot! Your player is out!!")
-                    playing_batsmen.remove(playing_batsmen[position])
-                    playing_batsmen.append(user_player_dict[next_player[next_player_position]]) 
-                    next_player_position += 1
+                    next_player = input("Which player do you want to send next?: ").strip().title()
+
+                    while next_player not in user_team.player_names or next_player in played_batsmen:
+                        if next_player not in user_team.player_names:
+                            next_player = input("That player was not in your team ").strip().title()
+                        if next_player in played_batsmen:
+                            next_player = input("HEY! That player already played ").strip().title()
+
+                    for dev_player_name, player_name in user_player_dict.items():
+                        if player_name.name == next_player:
+                            playing_batsmen.append(user_player_dict[dev_player_name]) 
+
+                    playing_batsmen.remove(current_batsman)       
                     current_batsman = playing_batsmen[position] if current_batsman == playing_batsmen[position-1] else playing_batsmen[position-1]
                     position += 1
                     if position > 1:
