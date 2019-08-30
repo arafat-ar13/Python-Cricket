@@ -1,4 +1,4 @@
-from random import randint
+from random import randint, choice
 from time import sleep
 
 
@@ -48,8 +48,8 @@ game_balls = overs * 6
 # Creating a Toss simulation
 
 def toss():
-    choice = ["heads", "tails"]
-    return choice[randint(0, 1)]
+    heads_tails = ["heads", "tails"]
+    return choice(heads_tails)
 
 # Assigning Heads or Tails to both teams
 user_team.toss_choice = input("[h/t] Heads or Tails: ").lower()
@@ -96,28 +96,19 @@ def batting(balls, first_innings=False):
     global user_wickets
     position = 0
     players_left = user_team.player_names
+    print(f"You have {user_team.player_names}")
     played_batsmen = list()
-    custom_players = input("Which two players are you willing to send first?: ").split(",")
-    custom_players = [player.strip().title() for player in custom_players]
-    while len(custom_players) > 2:
-        custom_players = input("You can't send more than two people to bat ").split(",")
-    player_existence_checker = list()
-    for player in custom_players:
-        if player not in user_team.player_names:
-            player_existence_checker.append(False)
+    initial_batsmen = input("Which two players are you willing to send first?: ").split(",")
+    initial_batsmen = [player.strip().title() for player in initial_batsmen]
+    while set(initial_batsmen).issubset(user_team.player_names) == False or len(initial_batsmen) > 2:
+        if len(initial_batsmen) > 2:
+            initial_batsmen = input("You can't send more than two people to bat ").split(",")
+            initial_batsmen = [player.strip().title() for player in initial_batsmen]
         else:
-            player_existence_checker.append(True)
-    while False in player_existence_checker:
-        custom_players = input("The player you entered must be in your initial player list: ").split(",")
-        custom_players = [player.strip().title() for player in custom_players]
-        for index, player in enumerate(custom_players):
-            if player not in user_team.player_names:
-                player_existence_checker[index] = False
-            else:
-                player_existence_checker[index] = True
-    custom_players = [player.strip().title() for player in custom_players]
+            initial_batsmen = input("The player you entered must be in your initial player list: ").split(",")
+            initial_batsmen = [player.strip().title() for player in initial_batsmen]
     playing_batsmen = list()
-    for player in custom_players:
+    for player in initial_batsmen:
         for dev_player_name, player_name in user_player_dict.items():
             if player_name.name == player:
                 playing_batsmen.append(user_player_dict[dev_player_name])
@@ -138,7 +129,7 @@ def batting(balls, first_innings=False):
                     current_batsman = playing_batsmen[position] if current_batsman == playing_batsmen[position-1] else playing_batsmen[position-1]
             user_team_run = int(input(f"Playing: {current_batsman.name}. Enter your run number: "))
             print()
-            if user_team_run > 6:
+            if user_team_run > 100:
                 while user_team_run > 6:
                     user_team_run = int(input("You cannot enter number larger than 6 "))
             run = randint(0, 6)
@@ -158,23 +149,28 @@ def batting(balls, first_innings=False):
             else:
                 user_wickets -= 1
                 if user_wickets > 0:
-                    if current_batsman.name not in custom_players:
-                        players_left.remove(current_batsman.name)
-                    playing_batsmen.remove(current_batsman)
+                    if current_batsman.name not in initial_batsmen:
+                        for player in players_left:
+                            if current_batsman.name == player:
+                                players_left.remove(current_batsman.name)
                     sleep(0.5)
-                    print("Shoot! Your player is out!!")
+                    print(f"Shoot! {current_batsman.name} is out!!") 
                     next_player = input(f"Players left: {players_left}. Which player do you want to send next?: ").strip().title()
 
                     while next_player not in user_team.player_names or next_player in played_batsmen:
                         if next_player not in user_team.player_names:
                             next_player = input("That player was not in your team ").strip().title()
-                        if next_player in played_batsmen:
-                            next_player = input("HEY! That player already played ").strip().title()
+                        else:
+                            if next_player in playing_batsmen:
+                                next_player = input("He is/was currently playing! Change name: ").strip().title()
+                            else:
+                                next_player = input("HEY! That player already played ").strip().title()
 
                     for dev_player_name, player_name in user_player_dict.items():
                         if player_name.name == next_player:
                             playing_batsmen.append(user_player_dict[dev_player_name]) 
-     
+                            
+                    playing_batsmen.remove(current_batsman)
                     current_batsman = playing_batsmen[position] if current_batsman == playing_batsmen[position-1] else playing_batsmen[position-1]
                     position += 1
                     if position > 1:
@@ -224,18 +220,18 @@ def balling(balls, first_innings=False):
     next_player_position = 0
     while balls > 0:
         if opponent_wickets > 0:
+            if balls != game_balls:
+                if balls % 6 == 0:
+                    print()
+                    print("A over is done")
+                    print()
+                    current_batsman = playing_batsmen[position] if current_batsman == playing_batsmen[position-1] else playing_batsmen[position-1]
             user_team_ball = int(input(f"Playing: {current_batsman.name}. Enter your ball number: "))
             print()
             while user_team_ball > 6:
                 user_team_ball = int(input("Unless you don't want the opponent to get out, keep doin' your shitty stuff "))
             run = randint(0, 6)
             if run != user_team_ball:
-                if balls != game_balls:
-                    if balls % 6 == 0:
-                        print()
-                        print("A over is done")
-                        print()
-                        current_batsman = playing_batsmen[position] if current_batsman == playing_batsmen[position-1] else playing_batsmen[position-1]
                 opposing_team.team_score(run)
                 if run % 2 == 0:
                     print("You missed!")
@@ -256,8 +252,8 @@ def balling(balls, first_innings=False):
                 if opponent_wickets > 0:
                     next_player = ["Player " + str(x) for x in range(3, len(opposing_team.player_names)+1)] 
                     sleep(0.5)
-                    print("Damn! You took a wicket!!")
-                    playing_batsmen.remove(playing_batsmen[position])
+                    print(f"Damn! You took out {current_batsman.name}!!")
+                    playing_batsmen.remove(current_batsman)
                     playing_batsmen.append(opposing_player_dict[next_player[next_player_position]])
                     next_player_position += 1
                     current_batsman = playing_batsmen[position] if current_batsman == playing_batsmen[position-1] else playing_batsmen[position-1]
