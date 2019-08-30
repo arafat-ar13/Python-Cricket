@@ -23,11 +23,9 @@ Run cricket.py on any text editor to get started
 
 # Recent updates
 I want to congratulate myself for all the implementations I have made to this game recently. Those include:
-* Reduced lines of code by over 30% and still produce same results but even better as this allowed fewer tweaks to get more job done.
-* Early cessation of game when a team surpasses their target is now live! Whenever any team (you or the computer) bats in the second innings and chases and surpasses their target with balls and wickets left, the game will stop and the winner will be declared immediately.
-* Implemented a "over" system. Now overs have replaced balls. Each over consists of 6 balls and unlike before, the user gets to choose how many overs they wish to play. And after each over, the player gets changed. But player remains same if he/she scored odd run (just like in real Cricket game)
-* Added an optional option for users to name the opponent team to their liking. If they wish to not play against any specific team, my game will automatically name the oppoent team "Opposing Team". (So creative, right?)
-* Finally added support for custom player choosing when deploying them. During the starting of the user's batting session, they will be asked to say which two players they want to send first. Then if someone gets out, the user will again have an option to choose which player to send next. Lookout parameters have been set which will cancel any abuse to this feature. Such include: you cannot send a player who have played before and neither can you enter a player's name who isn't in your team.
+* Finally added support for custom player choosing when deploying them. During the starting of the user's batting session, they will be asked to say which two players they want to send first. Then if someone gets out, the user will again have an option to choose which player to send next.
+* Worked really hard on Lookout Parameters, which will cancel any abuse to the Custom Selection feature. Such include: you cannot send a player who have played before and neither can you enter a player's name who isn't in your team.
+* For both teams during batting, view which player has been out. And for your (the user's) batting innings, when a player gets out, a list of all available players are displayed for better selection view. The list keeps decreasing as your players get out.
 
 
 # Future plans
