@@ -113,8 +113,10 @@ def batting(balls, first_innings=False):
             if player_name.name == player:
                 playing_batsmen.append(user_player_dict[dev_player_name])
 
-    for player in playing_batsmen:
-        players_left.remove(player.name)
+    for player in initial_batsmen:
+        players_left.remove(player)
+    for player in initial_batsmen:
+        played_batsmen.append(player)
 
     current_batsman = playing_batsmen[position]
     while balls > 0:
@@ -149,29 +151,31 @@ def batting(balls, first_innings=False):
             else:
                 user_wickets -= 1
                 if user_wickets > 0:
-                    if current_batsman.name not in initial_batsmen:
-                        for player in players_left:
-                            if current_batsman.name == player:
-                                players_left.remove(current_batsman.name)
+                    if current_batsman.name not in initial_batsmen and current_batsman.name in players_left:
+                        players_left.remove(current_batsman.name)
+
                     sleep(0.5)
                     print(f"Shoot! {current_batsman.name} is out!!") 
                     next_player = input(f"Players left: {players_left}. Which player do you want to send next?: ").strip().title()
 
                     while next_player not in user_team.player_names or next_player in played_batsmen:
-                        if next_player not in user_team.player_names:
-                            next_player = input("That player was not in your team ").strip().title()
-                        else:
-                            if next_player in playing_batsmen:
-                                next_player = input("He is/was currently playing! Change name: ").strip().title()
-                            else:
-                                next_player = input("HEY! That player already played ").strip().title()
+                        if next_player == current_batsman.name:
+                            while next_player == current_batsman.name:
+                                next_player = input("He just got out dude wth? Enter again!: ").strip().title()
+                        elif next_player in played_batsmen:
+                            next_player = input("He already played. Try again: ").strip().title()
+                        elif next_player not in user_team.player_names:
+                            next_player = input("That player was not in your team. Enter again: ").strip().title()
 
+                    if next_player in players_left:
+                        players_left.remove(next_player)
+
+                    playing_batsmen.remove(current_batsman)
                     for dev_player_name, player_name in user_player_dict.items():
                         if player_name.name == next_player:
                             playing_batsmen.append(user_player_dict[dev_player_name]) 
                             
-                    playing_batsmen.remove(current_batsman)
-                    current_batsman = playing_batsmen[position] if current_batsman == playing_batsmen[position-1] else playing_batsmen[position-1]
+                    current_batsman = playing_batsmen[1]
                     position += 1
                     if position > 1:
                         position = 0
