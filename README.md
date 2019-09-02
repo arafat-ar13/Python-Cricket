@@ -13,13 +13,13 @@ Run cricket.py on any text editor to get started
 7) In any case, whatever you get, the opponent will always get the opposite of that. For e.g, if you get to bat, the opponent will be bowling.
 
 # Batting rules
-7) When batting, you are asked to enter an integer number. If your number matches the random number that the opposing bowler creates when bowling, your current batsman gets out and is permanently removed from the playing field and your next batsman will come to play. If they don't match, then your current batsman will score the number you have given.
-8) During batting, for either teams, if the current batsman scores an odd number, the player gets switched and the next player becomes the current batsman.
-9) After an over, the player gets changed.
-10) When batting, in the second innings, if a team surpasses their target, they are immediately declared winners and the game will stop.
+8) When batting, you are asked to enter an integer number. If your number matches the random number that the opposing bowler creates when bowling, your current batsman gets out and is permanently removed from the playing field and your next batsman will come to play. If they don't match, then your current batsman will score the number you have given.
+9) During batting, for either teams, if the current batsman scores an odd number, the player gets switched and the next player becomes the current batsman.
+10) After an over, the player gets changed.
+11) When batting, in the second innings, if a team surpasses their target, they are immediately declared winners and the game will stop.
 
 # Bowling rules
-11) When bowling, you are again asked to enter an integer number. If your number matches the random number that the opposing batsman scores, the current opposing batsman gets out and is permanently replaced by another player. But if they don't match, the opposing batsman will score the run that he/she random-created.
+12) When bowling, you are again asked to enter an integer number. If your number matches the random number that the opposing batsman scores, the current opposing batsman gets out and is permanently replaced by another player. But if they don't match, the opposing batsman will score the run that he/she random-created.
 
 # Recent updates
 I want to congratulate myself for all the implementations I have made to this game recently. Those include:
@@ -29,7 +29,23 @@ I want to congratulate myself for all the implementations I have made to this ga
 
 
 # Future plans
-* No one really quite likes or gets impressed by a text-based game (or any program for that matter) and I am sorry but I just don't know much GUI programming yet. So, in the future, I will include an option to autoplay when the user is batting or bowling. Happy now?
+* After each over, get an option to do a number of things:
+  * Continue with your usual bowling/batting.
+  When batting:
+    * View a list of your remaining players
+    * View your total team score
+    * View your players' scores
+    * View balls left
+    * See how many wickets you have left
+    If second innings batting:
+      * View your target
+      * View opponent team's total run
+  When bowling:
+    * An option to autoplay the remaining balls
+    * View opponent's total current run
+    * View opponent's wickets left
+    * View opponent's current batsmen
+* No one really quite likes or gets impressed by a text-based game (or any program for that matter) and I am sorry but I just don't know much GUI programming yet. So, in the future, I will include an option to autoplay the whole bowling innings. Happy now?
 * Now, when any team wins, the basic text that gets displayed is "Team A won by [run] runs". I wish to change that someday to reflect the real Cricket game where they say "Team A won by [wicket] wickets" or "Team B won by [run] runs". That's a complex thing to implement and so will take a while. (This feature is minor and will get less attention)
 
 
