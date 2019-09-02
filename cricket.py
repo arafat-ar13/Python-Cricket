@@ -52,6 +52,7 @@ def toss():
     return choice(heads_tails)
 
 # Assigning Heads or Tails to both teams
+sleep(0.75)
 user_team.toss_choice = input("[h/t] Heads or Tails: ").lower()
 user_team.toss_choice = "heads" if user_team.toss_choice in ["h", "heads"] else "tails"
 opposing_team.toss_choice = "heads" if user_team.toss_choice == "tails" else "tails"
@@ -93,6 +94,7 @@ for player in range(1, len(user_team.player_names)+1):
 user_wickets = opponent_wickets = len(user_team.player_names) - 1
 
 def batting(balls, first_innings=False):
+    sleep(1)
     global user_wickets
     position = 0
     players_left = user_team.player_names
@@ -161,7 +163,7 @@ def batting(balls, first_innings=False):
                     while next_player not in user_team.player_names or next_player in played_batsmen:
                         if next_player == current_batsman.name:
                             while next_player == current_batsman.name:
-                                next_player = input("He just got out dude wth? Enter again!: ").strip().title()
+                                next_player = input("He just got out dude, wth? Enter again!: ").strip().title()
                         elif next_player in played_batsmen:
                             next_player = input("He already played. Try again: ").strip().title()
                         elif next_player not in user_team.player_names:
@@ -184,7 +186,7 @@ def batting(balls, first_innings=False):
                 if user_team.total_team_run[user_team.team_name] > opposing_team.total_team_run[opposing_team.team_name]:
                     print()
                     sleep(1)
-                    print(f"You have won the match with {balls} left!!")
+                    print(f"You have won the match with {balls} balls left!!")
                     balls = 0
 
         else:
@@ -298,6 +300,12 @@ def balling(balls, first_innings=False):
         print(f"{opposing_team.team_name} scored {opposing_team.total_team_run[opposing_team.team_name]}. Your target is {opposing_team.total_team_run[opposing_team.team_name]+1}")
 
 
+sleep(1)
+print()
+print(f"Line up: {user_team.team_name}: {user_team.player_names}")
+sleep(0.5)
+print(f"{opposing_team.team_name}: {opposing_team.player_names}")
+print()
 
 # Starting first innings
 if user_team.playing == "Batting":
