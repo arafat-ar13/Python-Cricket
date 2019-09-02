@@ -31,16 +31,16 @@ I want to congratulate myself for all the implementations I have made to this ga
 # Future plans
 * After each over, get an option to do a number of things:
   * Continue with your usual bowling/batting.
-  When batting:
+  * If batting:
     * View a list of your remaining players
     * View your total team score
     * View your players' scores
     * View balls left
     * See how many wickets you have left
-    If second innings batting:
+    * If second innings batting:
       * View your target
       * View opponent team's total run
-  When bowling:
+  * If bowling:
     * An option to autoplay the remaining balls
     * View opponent's total current run
     * View opponent's wickets left
