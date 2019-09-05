@@ -39,7 +39,7 @@ I want to congratulate myself for all the implementations I have made to this ga
     * See how many wickets you have left
     * If second innings batting:
       * View your target
-      * View opponent team's total run
+      * Surrender (vastly different from autoplay)
   * If bowling:
     * An option to autoplay the remaining balls
     * View opponent's total current run
