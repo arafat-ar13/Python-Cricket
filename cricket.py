@@ -121,6 +121,18 @@ def batting(balls, first_innings=False):
         played_batsmen.append(player)
 
     current_batsman = playing_batsmen[position]
+    def over_options(user_choice):
+        if user_choice == "b":
+            print(players_left)
+        elif user_choice == "c":
+            print(user_team.total_team_run)
+        elif user_choice == "d":
+            for player_name in user_player_dict:
+                for value in user_player_dict[player_name].player_info_dict.values():
+                    if value > 0:
+                        print(user_player_dict[player_name].player_info_dict)
+        elif user_choice == "e":
+            print(f"Balls left: {balls}\nWickets left: {user_wickets}")
     while balls > 0:
         if current_batsman.name not in played_batsmen:
             played_batsmen.append(current_batsman.name)
@@ -131,9 +143,17 @@ def batting(balls, first_innings=False):
                     print("A over is done")
                     print()
                     current_batsman = playing_batsmen[position] if current_batsman == playing_batsmen[position-1] else playing_batsmen[position-1]
+                    print()
+                    sleep(1)
+                    print("Options: a) Continue b) Remaining players\nc) Current team run d) Players' scores\ne) Balls & wickets left")
+                    user_option_choice = input("[a/b/c/d/e]: ").lower()
+                    while user_option_choice != "a":
+                        over_options(user_option_choice)
+                        user_option_choice = input("[a/b/c/d/e]: ").lower()
+                        sleep(0.85)
             user_team_run = int(input(f"Playing: {current_batsman.name}. Enter your run number: "))
             print()
-            if user_team_run > 100:
+            if user_team_run > 6:
                 while user_team_run > 6:
                     user_team_run = int(input("You cannot enter number larger than 6 "))
             run = randint(0, 6)
