@@ -133,6 +133,9 @@ def batting(balls, first_innings=False):
                         print(user_player_dict[player_name].player_info_dict)
         elif user_choice == "e":
             print(f"Balls left: {balls}\nWickets left: {user_wickets}")
+        elif user_choice == "f":
+            print(f"Your target is {opposing_team.total_team_run[opposing_team.team_name]+1}")
+            
     while balls > 0:
         if current_batsman.name not in played_batsmen:
             played_batsmen.append(current_batsman.name)
@@ -145,62 +148,74 @@ def batting(balls, first_innings=False):
                     current_batsman = playing_batsmen[position] if current_batsman == playing_batsmen[position-1] else playing_batsmen[position-1]
                     print()
                     sleep(1)
-                    print("Options: a) Continue b) Remaining players\nc) Current team run d) Players' scores\ne) Balls & wickets left")
-                    user_option_choice = input("[a/b/c/d/e]: ").lower()
+                    if first_innings:
+                        extra_options = "f) View target g) Surrender"
+                        extra_option_suffix = ["/f", "/g"]
+                    else:
+                        extra_options = str()
+                        extra_option_suffix = ["", ""]
+                    print(f"Options: a) Continue b) Remaining players\nc) Current team run d) Players' scores\ne) Balls & wickets left {extra_options}")
+                    user_option_choice = input(f"[a/b/c/d/e{extra_option_suffix[0]}{extra_option_suffix[1]}]: ").lower()
                     while user_option_choice != "a":
-                        over_options(user_option_choice)
-                        user_option_choice = input("[a/b/c/d/e]: ").lower()
-                        sleep(0.85)
-            user_team_run = int(input(f"Playing: {current_batsman.name}. Enter your run number: "))
-            print()
-            if user_team_run > 6:
-                while user_team_run > 6:
-                    user_team_run = int(input("You cannot enter number larger than 6 "))
-            run = randint(0, 6)
-            if run != user_team_run:
-                user_team.team_score(user_team_run)
-                if user_team_run % 2 == 0:
-                    sleep(0.5)
-                    print(f"Wow! {current_batsman.name} scored {user_team_run} runs")
-                    current_batsman.run(user_team_run)
+                        if user_option_choice == "g":
+                            balls = 0
+                            print("Surrendering...")
+                            break
+                        if user_option_choice not in ["a", "g"]:
+                            over_options(user_option_choice)
+                            user_option_choice = input(f"[a/b/c/d/e{extra_option_suffix[0]}{extra_option_suffix[1]}]: ").lower()
+                            sleep(0.85)
+            if balls > 0:
+                user_team_run = int(input(f"Playing: {current_batsman.name}. Enter your run number: "))
+                print()
+                if user_team_run > 6:
+                    while user_team_run > 6:
+                        user_team_run = int(input("You cannot enter number larger than 6 "))
+                run = randint(0, 6)
+                if run != user_team_run:
+                    user_team.team_score(user_team_run)
+                    if user_team_run % 2 == 0:
+                        sleep(0.5)
+                        print(f"Wow! {current_batsman.name} scored {user_team_run} runs")
+                        current_batsman.run(user_team_run)
+                    else:
+                        print(f"Wow! {current_batsman.name} scored {user_team_run} runs")
+                        position += 1
+                        if position > 1:
+                            position = 0
+                        current_batsman.run(user_team_run)
+                        current_batsman = playing_batsmen[position] if current_batsman == playing_batsmen[position-1] else playing_batsmen[position-1]
                 else:
-                    print(f"Wow! {current_batsman.name} scored {user_team_run} runs")
-                    position += 1
-                    if position > 1:
-                        position = 0
-                    current_batsman.run(user_team_run)
-                    current_batsman = playing_batsmen[position] if current_batsman == playing_batsmen[position-1] else playing_batsmen[position-1]
-            else:
-                user_wickets -= 1
-                if user_wickets > 0:
-                    if current_batsman.name not in initial_batsmen and current_batsman.name in players_left:
-                        players_left.remove(current_batsman.name)
+                    user_wickets -= 1
+                    if user_wickets > 0:
+                        if current_batsman.name not in initial_batsmen and current_batsman.name in players_left:
+                            players_left.remove(current_batsman.name)
 
-                    sleep(0.5)
-                    print(f"Shoot! {current_batsman.name} is out!!") 
-                    next_player = input(f"Players left: {players_left}. Which player do you want to send next?: ").strip().title()
+                        sleep(0.5)
+                        print(f"Shoot! {current_batsman.name} is out!!") 
+                        next_player = input(f"Players left: {players_left}. Which player do you want to send next?: ").strip().title()
 
-                    while next_player not in user_team.player_names or next_player in played_batsmen:
-                        if next_player == current_batsman.name:
-                            while next_player == current_batsman.name:
-                                next_player = input("He just got out dude, wth? Enter again!: ").strip().title()
-                        elif next_player in played_batsmen:
-                            next_player = input("He already played. Try again: ").strip().title()
-                        elif next_player not in user_team.player_names:
-                            next_player = input("That player was not in your team. Enter again: ").strip().title()
+                        while next_player not in user_team.player_names or next_player in played_batsmen:
+                            if next_player == current_batsman.name:
+                                while next_player == current_batsman.name:
+                                    next_player = input("He just got out dude, wth? Enter again!: ").strip().title()
+                            elif next_player in played_batsmen:
+                                next_player = input("He already played. Try again: ").strip().title()
+                            elif next_player not in user_team.player_names:
+                                next_player = input("That player was not in your team. Enter again: ").strip().title()
 
-                    if next_player in players_left:
-                        players_left.remove(next_player)
+                        if next_player in players_left:
+                            players_left.remove(next_player)
 
-                    playing_batsmen.remove(current_batsman)
-                    for dev_player_name, player_name in user_player_dict.items():
-                        if player_name.name == next_player:
-                            playing_batsmen.append(user_player_dict[dev_player_name]) 
-                            
-                    current_batsman = playing_batsmen[1]
-                    position += 1
-                    if position > 1:
-                        position = 0
+                        playing_batsmen.remove(current_batsman)
+                        for dev_player_name, player_name in user_player_dict.items():
+                            if player_name.name == next_player:
+                                playing_batsmen.append(user_player_dict[dev_player_name]) 
+                                
+                        current_batsman = playing_batsmen[1]
+                        position += 1
+                        if position > 1:
+                            position = 0
             
             if first_innings:
                 if user_team.total_team_run[user_team.team_name] > opposing_team.total_team_run[opposing_team.team_name]:
