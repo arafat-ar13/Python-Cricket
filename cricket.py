@@ -133,7 +133,7 @@ def batting(balls, first_innings=False):
                         print(user_player_dict[player_name].player_info_dict)
         elif user_choice == "e":
             print(f"Balls left: {balls}\nWickets left: {user_wickets}")
-        elif user_choice == "f":
+        elif user_choice == "g":
             print(f"Your target is {opposing_team.total_team_run[opposing_team.team_name]+1}")
             
     while balls > 0:
@@ -149,21 +149,23 @@ def batting(balls, first_innings=False):
                     print()
                     sleep(1)
                     if first_innings:
-                        extra_options = "f) View target g) Surrender"
-                        extra_option_suffix = ["/f", "/g"]
+                        extra_options = "g) View target"
+                        extra_option_suffix = ["/g"]
                     else:
                         extra_options = str()
-                        extra_option_suffix = ["", ""]
-                    print(f"Options: a) Continue b) Remaining players\nc) Current team run d) Players' scores\ne) Balls & wickets left {extra_options}")
-                    user_option_choice = input(f"[a/b/c/d/e{extra_option_suffix[0]}{extra_option_suffix[1]}]: ").lower()
+                        extra_option_suffix = [""]
+                    print(f"Options: a) Continue b) Remaining players\nc) Current team run d) Players' scores\ne) Balls & wickets left f) Surrender {extra_options}")
+                    user_option_choice = input(f"[a/b/c/d/e/f{extra_option_suffix[0]}]: ").lower()
+                    while user_option_choice not in ["a", "b", "c", "d", "e", "f", "g"]:
+                        user_option_choice = input(f"You cannot enter anyting other than: [a/b/c/d/e/f/{extra_option_suffix[0]}] ").lower()
                     while user_option_choice != "a":
-                        if user_option_choice == "g":
+                        if user_option_choice == "f":
                             balls = 0
                             print("Surrendering...")
                             break
-                        if user_option_choice not in ["a", "g"]:
+                        if user_option_choice not in ["a", "f"]:
                             over_options(user_option_choice)
-                            user_option_choice = input(f"[a/b/c/d/e{extra_option_suffix[0]}{extra_option_suffix[1]}]: ").lower()
+                            user_option_choice = input(f"[a/b/c/d/e/f{extra_option_suffix[0]}]: ").lower()
                             sleep(0.85)
             if balls > 0:
                 user_team_run = int(input(f"Playing: {current_batsman.name}. Enter your run number: "))
@@ -234,7 +236,7 @@ def batting(balls, first_innings=False):
     print()
     sleep(1)
 
-
+    
     # Shows the scores of the players who got to play and score anything above zero in the innings.
     if first_innings in [False, True]:
         for player_name in user_player_dict:
@@ -259,6 +261,19 @@ def balling(balls, first_innings=False):
     playing_batsmen = [opposing_player_dict["Player 1"], opposing_player_dict["Player 2"]]
     current_batsman = playing_batsmen[position]
     next_player_position = 0
+    def over_options(user_choice):
+        if user_choice == "c":
+            if first_innings:
+                extra = f"They still need {(user_team.total_team_run[user_team.team_name]-opposing_team.total_team_run[opposing_team.team_name])+1} runs to win."
+            else:
+                extra = str()
+            print(f"{opposing_team.team_name}'s current score is {opposing_team.total_team_run[opposing_team.team_name]}. {extra}")
+        elif user_choice == "d":
+            print(f"{opposing_team.team_name} has {opponent_wickets} wickets left")
+        elif user_choice == "e":
+            print(f"{[player.name for player in playing_batsmen]}")  
+
+    autoplay = [False]        
     while balls > 0:
         if opponent_wickets > 0:
             if balls != game_balls:
@@ -267,46 +282,76 @@ def balling(balls, first_innings=False):
                     print("A over is done")
                     print()
                     current_batsman = playing_batsmen[position] if current_batsman == playing_batsmen[position-1] else playing_batsmen[position-1]
-            user_team_ball = int(input(f"Playing: {current_batsman.name}. Enter your ball number: "))
-            print()
-            while user_team_ball > 6:
-                user_team_ball = int(input("Unless you don't want the opponent to get out, keep doin' your shitty stuff "))
-            run = randint(0, 6)
-            if run != user_team_ball:
-                opposing_team.team_score(run)
-                if run % 2 == 0:
-                    print("You missed!")
+                    extra_option = "Manual play" if autoplay[0] == True else "Autoplay"
+                    print(f"Options: a) Continue b) {extra_option} c) {opposing_team.team_name}'s current score\nd) {opposing_team.team_name}'s renaming wickets e) {opposing_team.team_name}'s current batsmen\nf) Surrender")
+                    user_option_choice = input(f"[a/b/c/d/e/f]: ").lower()
+                    while user_option_choice not in ["a", "b", "c", "d", "e", "f"]:
+                        user_option_choice = input(f"You cannot enter anything other than these [a/b/c/d/e/f]: ").lower()
+                    while user_option_choice != "a":
+                        if user_option_choice == "b" and extra_option == "Manual play":
+                            autoplay.clear()
+                            autoplay.append(False)
+                            break
+                        if user_option_choice == "b":
+                            autoplay.clear()
+                            autoplay.append(True)
+                            break
+                        if user_option_choice == "f":
+                            balls = 0
+                            print("Surrendering...")
+                            break
+                        if user_option_choice not in ["a", "b", "f"]:
+                            over_options(user_option_choice)
+                            user_option_choice = input(f"[a/b/c/d/e/f: ").lower()
+                            while user_option_choice not in ["a", "b", "c", "d", "e", "f"]:
+                                user_option_choice = input(f"You cannot enter anything other than these [a/b/c/d/e/f]: ").lower()
+                            sleep(0.85)
+            if balls > 0:
+                if autoplay[0] == False:
+                    user_team_ball = int(input(f"Playing: {current_batsman.name}. Enter your ball number: "))
+                    print()
+                    while user_team_ball > 6:
+                        user_team_ball = int(input("Unless you don't want the opponent to get out, keep doin' your shitty stuff "))
+                if autoplay[0]:
+                    user_team_ball = randint(0, 6)
+                    print(f"You bowled {user_team_ball}")
                     sleep(0.5)
-                    print(f"{current_batsman.name} scored {run} runs")
-                    current_batsman.run(run)
+                run = randint(0, 6)
+                if run != user_team_ball:
+                    opposing_team.team_score(run)
+                    if run % 2 == 0:
+                        print("You missed!")
+                        sleep(0.5)
+                        print(f"{current_batsman.name} scored {run} runs")
+                        current_batsman.run(run)
+                    else:
+                        print("You missed!")
+                        sleep(0.5)
+                        print(f"{current_batsman.name} scored {run} runs")
+                        position += 1
+                        if position > 1:
+                            position = 0
+                        current_batsman.run(run)
+                        current_batsman = playing_batsmen[position] if current_batsman == playing_batsmen[position-1] else playing_batsmen[position-1]
                 else:
-                    print("You missed!")
-                    sleep(0.5)
-                    print(f"{current_batsman.name} scored {run} runs")
-                    position += 1
-                    if position > 1:
-                        position = 0
-                    current_batsman.run(run)
-                    current_batsman = playing_batsmen[position] if current_batsman == playing_batsmen[position-1] else playing_batsmen[position-1]
-            else:
-                opponent_wickets -= 1
-                if opponent_wickets > 0:
-                    next_player = ["Player " + str(x) for x in range(3, len(opposing_team.player_names)+1)] 
-                    sleep(0.5)
-                    print(f"Damn! You took out {current_batsman.name}!!")
-                    playing_batsmen.remove(current_batsman)
-                    playing_batsmen.append(opposing_player_dict[next_player[next_player_position]])
-                    next_player_position += 1
-                    current_batsman = playing_batsmen[position] if current_batsman == playing_batsmen[position-1] else playing_batsmen[position-1]
-                    position += 1
-                    if position > 1:
-                        position = 0
+                    opponent_wickets -= 1
+                    if opponent_wickets > 0:
+                        next_player = ["Player " + str(x) for x in range(3, len(opposing_team.player_names)+1)] 
+                        sleep(0.5)
+                        print(f"Damn! You took out {current_batsman.name}!!")
+                        playing_batsmen.remove(current_batsman)
+                        playing_batsmen.append(opposing_player_dict[next_player[next_player_position]])
+                        next_player_position += 1
+                        current_batsman = playing_batsmen[position] if current_batsman == playing_batsmen[position-1] else playing_batsmen[position-1]
+                        position += 1
+                        if position > 1:
+                            position = 0
 
             if first_innings:
                 if opposing_team.total_team_run[opposing_team.team_name] > user_team.total_team_run[user_team.team_name]:
                     print()
                     sleep(1)
-                    print("You have lost the match")
+                    print(f"You have lost the match. {opposing_team.team_name} won with {balls} balls remaining")
                     balls = 0
 
 
