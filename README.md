@@ -23,29 +23,27 @@ Run cricket.py on any text editor to get started
 
 # Recent updates
 I want to congratulate myself for all the implementations I have made to this game recently. Those include:
-* Finally added support for custom player choosing when deploying them. During the starting of the user's batting session, they will be asked to say which two players they want to send first. Then if someone gets out, the user will again have an option to choose which player to send next.
-* Worked really hard on Lookout Parameters, which will cancel any abuse to the Custom Selection feature. Such include: you cannot send a player who have played before and neither can you enter a player's name who isn't in your team.
-* For both teams during batting, view which player has been out. And for your (the user's) batting innings, when a player gets out, a list of all available players are displayed for better selection view. The list keeps decreasing as your players get out.
-
+* Introducing Over Options! 
+* Over Options are available for both batting and bowling sessions. The options are slightly different depending upon is it batting or bowling
+innings or is it the first or second innings.
+* Firstly during batting, after each over, you get the following options:
+ * Continue with your usual bowling/batting.
+ * View a list of your remaining players
+ * View your total team score
+ * View your players' scores
+ * View balls left and wickets left
+ * Surrender
+ * If second innings batting:
+   * View your target
+* During balling the options are tweaked:
+  * An option to autoplay the following over. Worked really hard on this feature. If you select autoplay, the following over will be played automatically and in the next Over Options you will get an option of "Manual play"! You can select that if you want to play manually again but if you don't then "Continue" will just let the game go on regardless of it's on autoplay or manual.
+  * Surrender
+  * View opponent's total current run
+  * View opponent's wickets left
+  * View opponent's current batsmen
+* [INFO] Autoplay and surrender: Autoplay is only available when the user is bowling. This feature works by neglecting the user's ability to enter different ball numbers and rather random-generates a number from 0 to 6 and uses that number for the next ball. Whereas surrender will just straight-up finish the innings by making the balls zero while still retaining your or the opponent's current scores and other info.
 
 # Future plans
-* After each over, get an option to do a number of things:
-  * Continue with your usual bowling/batting.
-  * If batting:
-    * View a list of your remaining players
-    * View your total team score
-    * View your players' scores
-    * View balls left
-    * See how many wickets you have left
-    * If second innings batting:
-      * View your target
-      * Surrender (vastly different from autoplay)
-  * If bowling:
-    * An option to autoplay the remaining balls
-    * View opponent's total current run
-    * View opponent's wickets left
-    * View opponent's current batsmen
-* No one really quite likes or gets impressed by a text-based game (or any program for that matter) and I am sorry but I just don't know much GUI programming yet. So, in the future, I will include an option to autoplay the whole bowling innings. Happy now?
 * Now, when any team wins, the basic text that gets displayed is "Team A won by [run] runs". I wish to change that someday to reflect the real Cricket game where they say "Team A won by [wicket] wickets" or "Team B won by [run] runs". That's a complex thing to implement and so will take a while. (This feature is minor and will get less attention)
 
 
