@@ -27,14 +27,14 @@ I want to congratulate myself for all the implementations I have made to this ga
 * Over Options are available for both batting and bowling sessions. The options are slightly different depending upon is it batting or bowling
 innings or is it the first or second innings.
 * Firstly during batting, after each over, you get the following options:
- * Continue with your usual bowling/batting.
- * View a list of your remaining players
- * View your total team score
- * View your players' scores
- * View balls left and wickets left
- * Surrender
- * If second innings batting:
-   * View your target
+  * Continue with your usual bowling/batting.
+  * View a list of your remaining players
+  * View your total team score
+  * View your players' scores
+  * View balls left and wickets left
+  * Surrender
+  * If second innings batting:
+    * View your target
 * During balling the options are tweaked:
   * An option to autoplay the following over. Worked really hard on this feature. If you select autoplay, the following over will be played automatically and in the next Over Options you will get an option of "Manual play"! You can select that if you want to play manually again but if you don't then "Continue" will just let the game go on regardless of it's on autoplay or manual.
   * Surrender
