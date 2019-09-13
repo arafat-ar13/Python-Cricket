@@ -44,6 +44,9 @@ innings or is it the first or second innings.
 * [INFO] Autoplay and surrender: Autoplay is only available when the user is bowling. This feature works by neglecting the user's ability to enter different ball numbers and rather random-generates a number from 0 to 6 and uses that number for the next ball. Whereas surrender will just straight-up finish the innings by making the balls zero while still retaining your or the opponent's current scores and other info.
 
 # Future plans
+## Known issues to fix
+* Due to the implementation of the "Surrender" feature, a bug has risen, mainly when the user is bowling. If the user surrenders during bowling in the first innings, then now matter how many balls are left, the opponent (the computer) will have to stop batting despite if they made 5 runs or 50. This provides a really simple way to win. And in the second innings if the user surrenders, then the computer will surely lose the match because they were still chasing their target when the user surrendered. Right now the "Surrender" features works like this: it just makes the balls for that innings equal to zero. So this is something that will be fixed in the next update
+## Updates
 * Now, when any team wins, the basic text that gets displayed is "Team A won by [run] runs". I wish to change that someday to reflect the real Cricket game where they say "Team A won by [wicket] wickets" or "Team B won by [run] runs". That's a complex thing to implement and so will take a while. (This feature is minor and will get less attention)
 
 
