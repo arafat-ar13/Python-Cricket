@@ -29,8 +29,8 @@ user_team = Team(input("Enter your team name: "), player_names=input(
     "Enter your players, seperated by commas: ").title().split(", "))
 
 sleep(0.3)
-oppo_team = input("Do you have any specific team you want to play against?: ")
-oppo_team = input("Enter the team name: ") if oppo_team in ["y", "yes", "yeah", "okay", "sure", "yeah sure", "kay", "oh yeah"] else "Opposing Team"
+oppo_team = input("Do you have any specific team you want to play against?: ").lower()
+oppo_team = input("Enter the team name: ") if oppo_team in ["y", "yes", "yeah", "okay", "sure", "yeah sure", "kay", "oh yeah", "yep", "kay"] else "Opposing Team"
 opposing_team = Team(oppo_team)
 
 # setting up opposing team players
@@ -93,7 +93,7 @@ for player in range(1, len(user_team.player_names)+1):
 # Creating wickets
 user_wickets = opponent_wickets = len(user_team.player_names) - 1
 
-def batting(balls, first_innings=False):
+def batting(balls, run_comments_dict, first_innings=False):
     sleep(1)
     global user_wickets
     position = 0
@@ -174,14 +174,20 @@ def batting(balls, first_innings=False):
                     while user_team_run > 6:
                         user_team_run = int(input("You cannot enter number larger than 6 "))
                 run = randint(0, 6)
+                for score, comment in enumerate(run_comments_dict.values(), start=1):
+                    if score == user_team_run:
+                        if comment[0].isupper():
+                            print_msg = comment
+                        else:
+                            print_msg = f"{current_batsman.name} {comment}"
                 if run != user_team_run:
                     user_team.team_score(user_team_run)
                     if user_team_run % 2 == 0:
                         sleep(0.5)
-                        print(f"Wow! {current_batsman.name} scored {user_team_run} runs")
+                        print(print_msg)
                         current_batsman.run(user_team_run)
                     else:
-                        print(f"Wow! {current_batsman.name} scored {user_team_run} runs")
+                        print(print_msg)
                         position += 1
                         if position > 1:
                             position = 0
@@ -219,7 +225,7 @@ def batting(balls, first_innings=False):
                         if position > 1:
                             position = 0
             
-            if first_innings:
+            if first_innings and not hasattr(user_team, "surrendered"):
                 if user_team.total_team_run[user_team.team_name] > opposing_team.total_team_run[opposing_team.team_name]:
                     print()
                     sleep(1)
@@ -244,6 +250,9 @@ def batting(balls, first_innings=False):
                 if value > 0:
                     print(user_player_dict[player_name].player_info_dict)
 
+    user_team.first_batter = True if not first_innings else False
+    opposing_team.first_batter = True if not user_team.first_batter else False
+
     print()
     sleep(0.5)
     # Displaying team total run
@@ -251,7 +260,7 @@ def batting(balls, first_innings=False):
 
     print()
     sleep(0.5)
-    if first_innings == False:
+    if not first_innings:
         print(f"You have scored {user_team.total_team_run[user_team.team_name]} runs. {opposing_team.team_name}'s target is {user_team.total_team_run[user_team.team_name]+1}")
 
 
@@ -269,7 +278,7 @@ def balling(balls, first_innings=False):
                 extra = str()
             print(f"{opposing_team.team_name}'s current score is {opposing_team.total_team_run[opposing_team.team_name]}. {extra}")
         elif user_choice == "d":
-            print(f"{opposing_team.team_name} has {opponent_wickets} wickets left")
+            print(f"{opposing_team.team_name} has {opponent_wickets} wickets left\nBalls left: {balls}")
         elif user_choice == "e":
             print(f"{[player.name for player in playing_batsmen]}")  
 
@@ -283,7 +292,7 @@ def balling(balls, first_innings=False):
                     print()
                     current_batsman = playing_batsmen[position] if current_batsman == playing_batsmen[position-1] else playing_batsmen[position-1]
                     extra_option = "Manual play" if autoplay[0] == True else "Autoplay"
-                    print(f"Options: a) Continue b) {extra_option} c) {opposing_team.team_name}'s current score\nd) {opposing_team.team_name}'s renaming wickets e) {opposing_team.team_name}'s current batsmen\nf) Surrender")
+                    print(f"Options: a) Continue b) {extra_option} c) {opposing_team.team_name}'s current score\nd) {opposing_team.team_name}'s renaming wickets and balls e) {opposing_team.team_name}'s current batsmen\nf) Surrender")
                     user_option_choice = input(f"[a/b/c/d/e/f]: ").lower()
                     while user_option_choice not in ["a", "b", "c", "d", "e", "f"]:
                         user_option_choice = input(f"You cannot enter anything other than these [a/b/c/d/e/f]: ").lower()
@@ -297,9 +306,13 @@ def balling(balls, first_innings=False):
                             autoplay.append(True)
                             break
                         if user_option_choice == "f":
-                            balls = 0
-                            print("Surrendering...")
-                            break
+                            danger_confirmation = input("You will lose the match. Are you sure? ").lower()
+                            if danger_confirmation in ["y", "yes", "yeah", "yah", "i am", "sure", "of course", "why not", "okay", "kay", "yas", "yep", "hmm"]:
+                                balls = 0
+                                sleep(0.9)
+                                print("Surrendering...")
+                                user_team.surrendered = True
+                                break
                         if user_option_choice not in ["a", "b", "f"]:
                             over_options(user_option_choice)
                             user_option_choice = input(f"[a/b/c/d/e/f: ").lower()
@@ -310,7 +323,7 @@ def balling(balls, first_innings=False):
                 if autoplay[0] == False:
                     user_team_ball = int(input(f"Playing: {current_batsman.name}. Enter your ball number: "))
                     print()
-                    while user_team_ball > 6:
+                    while user_team_ball > 100:
                         user_team_ball = int(input("Unless you don't want the opponent to get out, keep doin' your shitty stuff "))
                 if autoplay[0]:
                     user_team_ball = randint(0, 6)
@@ -342,7 +355,7 @@ def balling(balls, first_innings=False):
                         playing_batsmen.remove(current_batsman)
                         playing_batsmen.append(opposing_player_dict[next_player[next_player_position]])
                         next_player_position += 1
-                        current_batsman = playing_batsmen[position] if current_batsman == playing_batsmen[position-1] else playing_batsmen[position-1]
+                        current_batsman = playing_batsmen[-1]
                         position += 1
                         if position > 1:
                             position = 0
@@ -376,7 +389,7 @@ def balling(balls, first_innings=False):
     sleep(0.5)
     print(opposing_team.total_team_run)
 
-    if first_innings == False:
+    if first_innings == False and not hasattr(user_team, "surrendered"):
         print(f"{opposing_team.team_name} scored {opposing_team.total_team_run[opposing_team.team_name]}. Your target is {opposing_team.total_team_run[opposing_team.team_name]+1}")
 
 
@@ -388,8 +401,18 @@ print(f"{opposing_team.team_name}: {opposing_team.player_names}")
 print()
 
 # Starting first innings
+# Run comments
+run_comments = {
+    "one_run": "took a single!",
+    "two_runs": "has gone for the two!",
+    "three_runs": "took three runs!",
+    "four_runs": "drove a clean shot! 4 runs",
+    "five_runs": "Unbelievable! 5 runs off the bat!!",
+    "six_runs": "The ball's gone... That's a six!"
+}
+
 if user_team.playing == "Batting":
-    batting(game_balls)
+    batting(game_balls, run_comments)
 else:
     balling(game_balls)
     
@@ -400,10 +423,9 @@ first_innings_done = True
 # Second innings
 print()
 sleep(1)
-print("The first innings was done. We will now proceed to the next innings")
 
-
-if first_innings_done:
+if first_innings_done and not hasattr(user_team, "surrendered"):
+    print("The first innings was done. We will now proceed to the next innings")
     user_team.playing = "Balling" if user_team.playing == "Batting" else "Batting"
     opposing_team.playing = "Batting" if opposing_team.playing == "Balling" else "Balling"
 
@@ -411,8 +433,7 @@ if first_innings_done:
     if user_team.playing == "Balling":
         balling(game_balls, first_innings_done)
     else:
-        batting(game_balls, first_innings_done)
-
+        batting(game_balls, run_comments, first_innings_done)
 
 print()
 sleep(1)
@@ -423,10 +444,20 @@ print(opposing_team.total_team_run)
 
 # Let's see who won
 def winner_decider(user_team_run, opposing_team_run):
-    if user_team_run > opposing_team_run:
-        print(f"Congrats! Your team won by {user_team.total_team_run[user_team.team_name] - opposing_team.total_team_run[opposing_team.team_name]} runs")
-    else:
-        print(f"Better luck next time! {opposing_team.team_name} won by {opposing_team.total_team_run[opposing_team.team_name] - user_team.total_team_run[user_team.team_name]} runs")
+    if not hasattr(user_team, "surrendered"):
+        if user_team_run > opposing_team_run and not hasattr(user_team, "first_batter"):
+            print(f"Congrats! Your team won by {user_wickets} wickets")
+        elif user_team_run > opposing_team_run:
+            print(f"Congrats! Your team won by {user_team.total_team_run[user_team.team_name] - opposing_team.total_team_run[opposing_team.team_name]} runs")
+        if user_team_run < opposing_team_run and not hasattr(opposing_team, "first_batter"):
+            print(f"Better luck next time! {opposing_team.team_name} won by {opponent_wickets} wickets")
+        elif user_team_run < opposing_team_run:
+            print(f"Better luck next time! {opposing_team.team_name} won by {opposing_team.total_team_run[opposing_team.team_name] - user_team.total_team_run[user_team.team_name]} runs")
 
 sleep(1)
 winner_decider(user_team.total_team_run[user_team.team_name], opposing_team.total_team_run[opposing_team.team_name])
+
+if user_team.surrendered:
+    print()
+    sleep(0.29)
+    print("You have surrendered the match and therefore you have LOST!")
