@@ -28,9 +28,5 @@ I want to congratulate myself for all the implementations I have made to this ga
 * Made internal changes to match the real game of Cricket. Now, after the game and appropriate "win" message will be displayed that will completely match the real Cricket game's messages.
 * When someone from the opponent team gets out during their batting innings, the next batsman will always be the current batsman.
 
-# Future plans
-## Updates
-* Introduce "Wicket Comments" as well.
-
 
 # Happy playing!
