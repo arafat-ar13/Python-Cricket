@@ -30,3 +30,6 @@ I want to congratulate myself for all the implementations I have made to this ga
 
 
 # Happy playing!
+
+# The Game
+![The app running on the Bash Shell on PythonAnywhere](cricket_demo.png)
