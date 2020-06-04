@@ -33,3 +33,6 @@ I want to congratulate myself for all the implementations I have made to this ga
 
 # The Game
 ![The app running on the Bash Shell on PythonAnywhere](cricket_demo.png)
+
+# Play it
+[![Run on Repl.it](https://repl.it/badge/github/arafat-ar13/Python-Cricket)](https://repl.it/github/arafat-ar13/Python-Cricket)
